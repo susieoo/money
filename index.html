@@ -26,7 +26,6 @@
       --radius-md: 16px;
       --radius-sm: 12px;
       --phone-w: min(100vw, 428px);
-      --phone-h: 926px;
     }
 
     * { box-sizing: border-box; }
@@ -40,82 +39,80 @@
       color: var(--text);
     }
 
-    button, input, select, textarea { font: inherit; }
-
     body {
       display: flex;
       justify-content: center;
-      padding: 18px 0 24px;
+      padding: 14px 0 24px;
     }
 
-    .phone-frame {
+    button, input, select, textarea { font: inherit; }
+
+    .app-shell {
       width: var(--phone-w);
-      min-height: min(100dvh - 36px, var(--phone-h));
-      background: #1f261f;
-      border-radius: 42px;
-      padding: 10px;
-      box-shadow: 0 22px 50px rgba(36, 49, 38, 0.16);
-    }
-
-    .screen {
+      min-height: calc(100dvh - 28px);
       background: linear-gradient(180deg, #faf7f0 0%, #f6f1e7 100%);
-      border-radius: 34px;
-      min-height: calc(min(100dvh - 36px, var(--phone-h)) - 20px);
+      border-radius: 30px;
+      box-shadow: 0 22px 50px rgba(36, 49, 38, 0.12);
       overflow: hidden;
       position: relative;
       display: flex;
       flex-direction: column;
-    }
-
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: max(18px, env(safe-area-inset-top)) 22px 8px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.02em;
-    }
-
-    .notch {
-      width: 126px;
-      height: 28px;
-      background: #1f261f;
-      border-radius: 0 0 18px 18px;
-      position: absolute;
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-      z-index: 2;
+      border: 1px solid rgba(36, 49, 38, 0.06);
     }
 
     .app-scroll {
       flex: 1;
       overflow: auto;
-      padding: 4px 16px calc(104px + env(safe-area-inset-bottom));
+      padding: max(10px, env(safe-area-inset-top)) 16px calc(104px + env(safe-area-inset-bottom));
     }
 
     .hero {
-      padding: 14px 14px 12px;
-      background: linear-gradient(145deg, rgba(77, 139, 102, 0.1), rgba(255, 253, 248, 0.9));
-      border: 1px solid rgba(77, 139, 102, 0.14);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      margin-bottom: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(145deg, rgba(77, 139, 102, 0.08), rgba(255, 253, 248, 0.92));
+      border: 1px solid rgba(77, 139, 102, 0.12);
+      border-radius: 18px;
+      margin-bottom: 12px;
     }
 
     .hero p {
       margin: 0;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
-    .toolbar {
+    .summary-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin: 14px 0;
+      margin-bottom: 14px;
+    }
+
+    .summary-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-item .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .summary-item .value {
+      font-size: 23px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      line-height: 1.15;
+    }
+
+    .summary-item .sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     .card {
@@ -159,47 +156,13 @@
       font-weight: 700;
       background: var(--panel-soft);
       color: var(--muted);
-      border: 1px solid rgba(0,0,0,0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
       white-space: nowrap;
     }
 
     .pill.good { background: #eaf5ee; color: var(--loss); }
     .pill.warn { background: #fff2de; color: var(--warn); }
     .pill.danger { background: #fdeaea; color: var(--gain); }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .summary-item {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-    }
-
-    .summary-item .label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 7px;
-    }
-
-    .summary-item .value {
-      font-size: 23px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      line-height: 1.15;
-    }
-
-    .summary-item .sub {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
 
     .segmented {
       display: grid;
@@ -258,84 +221,141 @@
       background: #fff;
       color: var(--text);
       border-radius: 14px;
-      padding: 12px 13px;
+      padding: 13px 14px;
       outline: none;
-      transition: 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .textarea {
-      min-height: 86px;
+      min-height: 92px;
       resize: vertical;
-      line-height: 1.55;
     }
 
     .input:focus,
     .select:focus,
     .textarea:focus {
-      border-color: rgba(77, 139, 102, 0.62);
-      box-shadow: 0 0 0 4px rgba(77, 139, 102, 0.12);
+      border-color: rgba(77, 139, 102, 0.55);
+      box-shadow: 0 0 0 4px rgba(77, 139, 102, 0.1);
+    }
+
+    .readonly {
+      background: #f7f4ec;
+      color: #556257;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
     }
 
     .btn {
       border: 0;
-      border-radius: 999px;
-      padding: 12px 15px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: transform 0.15s ease, opacity 0.2s ease;
-    }
-
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--brand); color: #fff; }
-    .btn-secondary { background: var(--brand-soft); color: var(--brand); }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
-
-    .button-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-
-    .live-block {
-      background: linear-gradient(145deg, rgba(77, 139, 102, 0.08), rgba(255, 248, 236, 0.8));
-      border: 1px dashed rgba(77, 139, 102, 0.28);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .live-block.empty {
-      background: #fbf8f1;
-      border-color: var(--line);
-    }
-
-    .table-box {
-      border: 1px solid var(--line);
       border-radius: 16px;
-      overflow: hidden;
+      padding: 14px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4d8b66 0%, #5aa777 100%);
+      color: #fff;
+      box-shadow: 0 12px 26px rgba(77, 139, 102, 0.2);
+    }
+
+    .btn-secondary {
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    .btn-ghost {
       background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn.full { width: 100%; }
+
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .upload-box {
+      border: 1px dashed var(--line-strong);
+      border-radius: 18px;
+      background: #fcfaf4;
+      padding: 14px;
+    }
+
+    .upload-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .upload-box input[type="file"] {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .import-status {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f7f4ec;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .import-status.success {
+      background: #eef7f1;
+      color: var(--loss);
+    }
+
+    .import-status.error {
+      background: #fdeeed;
+      color: #a24646;
     }
 
     .overview-scroll {
-      overflow: auto;
+      margin: 0 -18px;
+      padding: 0 18px 4px;
+      overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #fff;
     }
 
     .overview-table {
-      min-width: 1680px;
       width: max-content;
-      border-collapse: collapse;
+      min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 12px;
     }
 
     .overview-table th,
     .overview-table td {
-      width: auto;
-      white-space: nowrap;
+      padding: 12px 10px;
+      vertical-align: top;
       border-right: 1px solid #efe7d7;
+      border-bottom: 1px solid #efe7d7;
+      white-space: nowrap;
+      background: #fff;
     }
 
     .overview-table th:last-child,
@@ -347,27 +367,36 @@
       position: sticky;
       top: 0;
       z-index: 1;
-      background: #fbf8f1;
+      background: #fbf7ee;
+      color: var(--muted);
+      font-weight: 700;
     }
 
     .overview-table .sticky-col {
       position: sticky;
       left: 0;
       z-index: 2;
-      min-width: 128px;
-      max-width: 140px;
       background: #fffdf8;
       box-shadow: 1px 0 0 #efe7d7;
     }
 
     .overview-table thead .sticky-col {
       z-index: 3;
-      background: #fbf8f1;
+      background: #fbf7ee;
     }
 
     .overview-table .wrap-col {
       white-space: normal;
-      min-width: 220px;
+      min-width: 170px;
+      max-width: 220px;
+      line-height: 1.55;
+    }
+
+    .table-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
     }
 
     table {
@@ -375,343 +404,303 @@
       border-collapse: collapse;
     }
 
-    th, td {
+    .table-box th,
+    .table-box td {
       padding: 11px 12px;
-      text-align: left;
-      font-size: 13px;
-      vertical-align: top;
       border-bottom: 1px solid #efe7d7;
-      line-height: 1.55;
+      vertical-align: top;
     }
 
-    th {
-      width: 36%;
-      background: #fbf8f1;
+    .table-box tr:last-child th,
+    .table-box tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-box th {
+      width: 110px;
+      background: #fbf7ee;
+      text-align: left;
+      font-size: 12px;
       color: var(--muted);
       font-weight: 600;
     }
 
-    tr:last-child th,
-    tr:last-child td { border-bottom: 0; }
-
-    .code {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 8px;
-      border-radius: 10px;
-      background: var(--panel-soft);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 12px;
+    .table-box td {
+      background: #fff;
+      font-size: 13px;
+      line-height: 1.55;
     }
 
-    .profit-positive { color: var(--gain); font-weight: 700; }
-    .profit-negative { color: var(--loss); font-weight: 700; }
+    .live-block {
+      padding: 14px;
+      border-radius: 18px;
+      background: #fbf7ee;
+      border: 1px dashed var(--line-strong);
+    }
+
+    .live-block.empty {
+      color: var(--muted);
+    }
 
     .holding-list {
-      display: flex;
-      flex-direction: column;
+      display: grid;
       gap: 12px;
     }
 
     .holding-card {
-      background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
+      border-radius: 20px;
+      background: #fff;
       overflow: hidden;
     }
 
     .holding-top {
-      padding: 16px 16px 10px;
       display: flex;
-      justify-content: space-between;
       align-items: flex-start;
+      justify-content: space-between;
       gap: 12px;
+      padding: 14px 14px 0;
+    }
+
+    .code {
+      font-size: 12px;
+      color: var(--brand);
+      font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
     .holding-name {
-      margin-top: 6px;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
+      margin-top: 6px;
+      line-height: 1.3;
     }
 
     .holding-note {
-      margin-top: 6px;
       font-size: 12px;
-      line-height: 1.55;
       color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.55;
     }
 
     .holding-body {
-      padding: 0 16px 16px;
+      padding: 14px;
     }
+
+    .profit-positive { color: var(--gain); }
+    .profit-negative { color: var(--loss); }
 
     .empty {
       padding: 18px;
-      text-align: center;
+      border-radius: 18px;
+      background: #fbf7ee;
+      border: 1px dashed var(--line-strong);
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
-      background: var(--panel);
-      border: 1px dashed var(--line-strong);
-      border-radius: 18px;
     }
 
     .bottom-bar {
-      position: sticky;
+      position: absolute;
+      left: 0;
+      right: 0;
       bottom: 0;
       padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(250, 247, 240, 0.86);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(216, 204, 183, 0.75);
+      background: linear-gradient(180deg, rgba(246, 241, 231, 0) 0%, rgba(246, 241, 231, 0.9) 30%, rgba(246, 241, 231, 0.98) 100%);
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .mini {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .top-actions {
+    .utility-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
 
     @media (max-width: 430px) {
       body { padding: 0; }
-      .phone-frame { width: 100vw; min-height: 100dvh; border-radius: 0; padding: 0; }
-      .screen { min-height: 100dvh; border-radius: 0; }
+      .app-shell {
+        width: 100vw;
+        min-height: 100dvh;
+        border-radius: 0;
+        border: 0;
+        box-shadow: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="phone-frame">
-    <div class="screen">
-      <div class="notch"></div>
-      <div class="status-bar">
-        <span>15:12</span>
-        <span></span>
-        <span>100%</span>
-      </div>
+  <div class="app-shell">
+    <div class="app-scroll">
+      <section class="hero">
+        <p>根据产品编号自动补齐产品信息；你可以手动录入或按模板批量上传。封闭期支持自动换算可赎回时间，录入后总览表格和持仓卡片会同步变化。</p>
+      </section>
 
-      <div class="app-scroll">
-        <section class="hero">
-          <p>录入画像和持仓后，下面的预览、总览表格和持仓卡片会自动联动更新。现在这版更适合手机直接录入和查看。</p>
-          <div class="top-actions">
-            <button class="btn btn-secondary" id="exportBtn">导出数据</button>
-            <button class="btn btn-ghost" id="seedBtn">恢复示例</button>
+      <section class="summary-grid" id="summaryGrid"></section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>总览表格</h2>
           </div>
-        </section>
-
-        <section class="summary-grid" id="summaryGrid"></section>
-
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>总览表格</h2>
-              <p>把你已录入的画像和持仓放进同一张横向表里。左右滑动可以一次看全所有字段。</p>
-            </div>
-            <span class="pill" id="overviewCountPill">0 行</span>
+          <span class="pill" id="overviewCountPill">0 行</span>
+        </div>
+        <div class="card-body">
+          <div class="overview-scroll">
+            <table class="overview-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col">编号 / 名称</th>
+                  <th>我买了多少钱</th>
+                  <th>占总持仓百分比</th>
+                  <th>买入时间</th>
+                  <th>封闭期</th>
+                  <th>可以赎回时间</th>
+                  <th>我目前的收益</th>
+                  <th>是否建议赎回</th>
+                  <th>风险等级</th>
+                  <th class="wrap-col">组合</th>
+                  <th>产品性质</th>
+                  <th class="wrap-col">持有规则</th>
+                  <th>成立以来年化</th>
+                  <th>3个月年化</th>
+                  <th>1个月年化</th>
+                  <th>备注</th>
+                </tr>
+              </thead>
+              <tbody id="overviewTableBody"></tbody>
+            </table>
           </div>
-          <div class="card-body">
-            <div class="mini">横向表格会优先展示持仓数据；仅录了画像、还没录持仓的产品，也会单独列一行显示。</div>
-            <div style="height: 12px;"></div>
-            <div class="overview-scroll">
-              <table class="overview-table">
-                <thead>
-                  <tr>
-                    <th class="sticky-col">编号 / 名称</th>
-                    <th>数据状态</th>
-                    <th>我买了多少钱</th>
-                    <th>占总持仓百分比</th>
-                    <th>买入时间</th>
-                    <th>可以赎回时间</th>
-                    <th>我目前的收益</th>
-                    <th>是否建议赎回</th>
-                    <th>风险等级</th>
-                    <th class="wrap-col">组合</th>
-                    <th>产品性质</th>
-                    <th class="wrap-col">持有规则</th>
-                    <th>成立以来年化</th>
-                    <th>3个月年化</th>
-                    <th>1个月年化</th>
-                    <th>标签</th>
-                    <th>备注</th>
-                  </tr>
-                </thead>
-                <tbody id="overviewTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>主动录入</h2>
-              <p>先录产品画像，再录持仓。录入时会即时联动下方的预览表格。</p>
-            </div>
-            <span class="pill" id="entryHintPill">画像 / 持仓</span>
+      <section class="card" id="entryCard">
+        <div class="card-head">
+          <div>
+            <h2>主动录入</h2>
+            <p>保留手动录入，也支持按模板批量上传。</p>
           </div>
-          <div class="card-body">
-            <div class="segmented">
-              <button class="segment-btn active" type="button" data-panel="profile">录产品画像</button>
-              <button class="segment-btn" type="button" data-panel="holding">录我的持仓</button>
-            </div>
+          <span class="pill" id="entryHintPill">当前录入：手动</span>
+        </div>
+        <div class="card-body">
+          <div class="segmented">
+            <button class="segment-btn active" type="button" data-panel="manual">手动录入</button>
+            <button class="segment-btn" type="button" data-panel="import">表格上传</button>
+          </div>
 
-            <div class="entry-panel active" id="panel-profile">
-              <form id="profileForm">
-                <div class="grid">
-                  <div class="field span-2">
-                    <label for="profileCode">产品编号</label>
-                    <input class="input" id="profileCode" name="code" placeholder="如 CMB-DEMO-001" required />
-                  </div>
-                  <div class="field span-2">
-                    <label for="profileName">产品名称</label>
-                    <input class="input" id="profileName" name="name" placeholder="如 示例-稳健固收+" required />
-                  </div>
-                  <div class="field">
-                    <label for="profileRisk">风险等级</label>
-                    <select class="select" id="profileRisk" name="risk" required>
-                      <option value="R1 低风险">R1 低风险</option>
-                      <option value="R2 中低风险">R2 中低风险</option>
-                      <option value="R3 中风险">R3 中风险</option>
-                      <option value="R4 中高风险">R4 中高风险</option>
-                      <option value="R5 高风险">R5 高风险</option>
+          <div class="entry-panel active" id="panel-manual">
+            <form id="holdingForm">
+              <div class="grid">
+                <div class="field span-2">
+                  <label for="holdingCode">产品编号</label>
+                  <input class="input" id="holdingCode" name="code" list="productCodeList" placeholder="如 CMB-DEMO-001" required />
+                  <datalist id="productCodeList"></datalist>
+                </div>
+                <div class="field">
+                  <label for="holdingAmount">我买了多少钱（¥）</label>
+                  <input class="input" id="holdingAmount" name="amount" type="number" step="0.01" required />
+                </div>
+                <div class="field">
+                  <label for="holdingProfit">我目前的收益（¥，可选）</label>
+                  <input class="input" id="holdingProfit" name="profit" type="number" step="0.01" />
+                </div>
+                <div class="field">
+                  <label for="holdingBuyDate">买入时间</label>
+                  <input class="input" id="holdingBuyDate" name="buyDate" type="date" required />
+                </div>
+                <div class="field">
+                  <label for="holdingLockValue">封闭期</label>
+                  <div class="grid" style="grid-template-columns: 1fr 110px; gap: 8px;">
+                    <input class="input" id="holdingLockValue" name="lockValue" type="number" min="0" step="1" placeholder="90" required />
+                    <select class="select" id="holdingLockUnit" name="lockUnit">
+                      <option value="day">天</option>
+                      <option value="month">个月</option>
                     </select>
                   </div>
-                  <div class="field">
-                    <label for="profileNature">产品性质</label>
-                    <input class="input" id="profileNature" name="nature" placeholder="固收增强 / 多资产" required />
-                  </div>
-                  <div class="field span-2">
-                    <label for="profileCombo">组合内容</label>
-                    <textarea class="textarea" id="profileCombo" name="combo" placeholder="如 债券70%，现金20%，权益10%" required></textarea>
-                  </div>
-                  <div class="field span-2">
-                    <label for="profileRules">持有规则</label>
-                    <textarea class="textarea" id="profileRules" name="rules" placeholder="如 最短持有90天，到期后每个开放日可赎回" required></textarea>
-                  </div>
-                  <div class="field">
-                    <label for="profileInception">成立以来年化（%）</label>
-                    <input class="input" id="profileInception" name="inceptionAnnualized" type="number" step="0.01" required />
-                  </div>
-                  <div class="field">
-                    <label for="profileThreeMonth">3个月年化（%）</label>
-                    <input class="input" id="profileThreeMonth" name="threeMonthAnnualized" type="number" step="0.01" required />
-                  </div>
-                  <div class="field">
-                    <label for="profileOneMonth">1个月年化（%）</label>
-                    <input class="input" id="profileOneMonth" name="oneMonthAnnualized" type="number" step="0.01" required />
-                  </div>
-                  <div class="field">
-                    <label for="profileTags">补充标签</label>
-                    <input class="input" id="profileTags" name="tags" placeholder="如 稳健仓位" />
-                  </div>
                 </div>
-                <div class="button-row">
-                  <button class="btn btn-primary" type="submit">保存画像</button>
-                  <button class="btn btn-ghost" type="button" id="profileResetBtn">清空</button>
+                <div class="field span-2">
+                  <label for="holdingRedeemDate">自动计算的可赎回时间</label>
+                  <input class="input readonly" id="holdingRedeemDate" name="redeemDate" readonly />
+                  <div class="hint">根据买入时间 + 封闭期自动计算，无需手填。</div>
                 </div>
-              </form>
-            </div>
-
-            <div class="entry-panel" id="panel-holding">
-              <form id="holdingForm">
-                <div class="grid">
-                  <div class="field span-2">
-                    <label for="holdingCode">产品编号</label>
-                    <input class="input" id="holdingCode" name="code" list="profileCodeList" placeholder="输入或选择已有编号" required />
-                    <datalist id="profileCodeList"></datalist>
-                  </div>
-                  <div class="field">
-                    <label for="holdingAmount">我买了多少钱（¥）</label>
-                    <input class="input" id="holdingAmount" name="amount" type="number" step="0.01" required />
-                  </div>
-                  <div class="field">
-                    <label for="holdingProfit">我目前的收益（¥）</label>
-                    <input class="input" id="holdingProfit" name="profit" type="number" step="0.01" required />
-                  </div>
-                  <div class="field">
-                    <label for="holdingBuyDate">买入时间</label>
-                    <input class="input" id="holdingBuyDate" name="buyDate" type="date" required />
-                  </div>
-                  <div class="field">
-                    <label for="holdingRedeemDate">可以赎回的时间</label>
-                    <input class="input" id="holdingRedeemDate" name="redeemDate" type="date" required />
-                  </div>
-                  <div class="field span-2">
-                    <label for="holdingMemo">备注</label>
-                    <input class="input" id="holdingMemo" name="memo" placeholder="如 备用金仓位 / 计划换仓" />
-                  </div>
+                <div class="field span-2">
+                  <label for="holdingMemo">备注（可选）</label>
+                  <input class="input" id="holdingMemo" name="memo" placeholder="如 备用金仓位 / 计划换仓" />
                 </div>
-                <div class="button-row">
-                  <button class="btn btn-primary" type="submit">保存持仓</button>
-                  <button class="btn btn-ghost" type="button" id="holdingResetBtn">清空</button>
-                </div>
-              </form>
+              </div>
+              <div class="button-row">
+                <button class="btn btn-primary" type="submit">保存持仓</button>
+                <button class="btn btn-ghost" type="button" id="holdingResetBtn">清空</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="entry-panel" id="panel-import">
+            <div class="upload-box">
+              <div class="upload-actions">
+                <button class="btn btn-secondary" type="button" id="downloadTemplateBtn">下载模板</button>
+                <label class="btn btn-primary" for="importFileInput" style="display:flex; align-items:center; justify-content:center;">选择表格</label>
+              </div>
+              <div class="mini">模板支持用 Excel / WPS 打开填写。建议保存为 CSV UTF-8 后上传。若同一条记录的“产品编号 + 买入时间”重复，上传时会自动覆盖旧记录。</div>
+              <input id="importFileInput" type="file" accept=".csv,text/csv" />
+              <div class="import-status" id="importStatus">还没有上传表格。先下载模板，填完后再上传。</div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h3>录入联动预览</h3>
-              <p>你填写的内容会即时变化，未保存前也能先看到表格结果。</p>
-            </div>
-            <span class="pill" id="previewPill">实时预览</span>
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h3>录入联动预览</h3>
+            <p>你填写的内容会即时变化，未保存前也能先看到结果。</p>
           </div>
-          <div class="card-body">
-            <div class="live-block empty" id="livePreview"></div>
-          </div>
-        </section>
+          <span class="pill" id="previewPill">实时预览</span>
+        </div>
+        <div class="card-body">
+          <div class="live-block empty" id="livePreview"></div>
+        </div>
+      </section>
 
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h3>产品画像库</h3>
-              <p>产品画像用表格行呈现，供持仓录入时自动补齐。</p>
-            </div>
-            <span class="pill" id="profileCountPill">0 个产品</span>
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h3>我的持仓</h3>
+            <p>每条持仓会自动补齐产品信息，并保留规则化赎回建议。</p>
           </div>
-          <div class="card-body">
-            <div class="holding-list" id="profileList"></div>
-          </div>
-        </section>
+          <span class="pill" id="holdingCountPill">0 条持仓</span>
+        </div>
+        <div class="card-body">
+          <div class="holding-list" id="holdingList"></div>
+        </div>
+      </section>
 
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h3>我的持仓</h3>
-              <p>每条持仓是一张竖向表格卡片，更适合手机查看全部指标。</p>
-            </div>
-            <span class="pill" id="holdingCountPill">0 条持仓</span>
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h3>数据工具</h3>
           </div>
-          <div class="card-body">
-            <div class="mini">赎回建议仅为规则辅助提示，不构成投资建议。当前会综合可赎回时间、近期年化、当前收益与持仓集中度。</div>
-            <div style="height: 12px;"></div>
-            <div class="holding-list" id="holdingList"></div>
+        </div>
+        <div class="card-body">
+          <div class="utility-row">
+            <button class="btn btn-ghost full" type="button" id="exportBtn">导出当前数据（CSV）</button>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+    </div>
 
-      <div class="bottom-bar">
-        <button class="btn btn-secondary" id="jumpProfileBtn">去录画像</button>
-        <button class="btn btn-primary" id="jumpHoldingBtn">去录持仓</button>
-      </div>
+    <div class="bottom-bar">
+      <button class="btn btn-secondary" id="jumpManualBtn">去手动录入</button>
+      <button class="btn btn-primary" id="jumpImportBtn">去表格上传</button>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "wealth-management-dashboard-iphone-v1";
+    const STORAGE_KEY = "wealth-management-dashboard-iphone-v2";
+    const LEGACY_STORAGE_KEY = "wealth-management-dashboard-iphone-v1";
 
-    const seedProfiles = [
+    const productCatalog = [
       {
         code: "CMB-DEMO-001",
         name: "示例-稳健固收+",
@@ -721,8 +710,7 @@
         rules: "最短持有 90 天，到期后每个开放日可赎回",
         inceptionAnnualized: 4.86,
         threeMonthAnnualized: 4.18,
-        oneMonthAnnualized: 3.72,
-        tags: "稳健仓位, 现金替代"
+        oneMonthAnnualized: 3.72
       },
       {
         code: "CMB-DEMO-208",
@@ -733,8 +721,7 @@
         rules: "最短持有 180 天，每周三开放赎回",
         inceptionAnnualized: 5.91,
         threeMonthAnnualized: 3.46,
-        oneMonthAnnualized: 1.22,
-        tags: "平衡配置, 收益进取"
+        oneMonthAnnualized: 1.22
       },
       {
         code: "CMB-DEMO-306",
@@ -745,8 +732,7 @@
         rules: "最短持有 365 天，到期后每月 15 日开放赎回",
         inceptionAnnualized: 8.24,
         threeMonthAnnualized: -1.35,
-        oneMonthAnnualized: -3.18,
-        tags: "进攻仓位, 波动较高"
+        oneMonthAnnualized: -3.18
       }
     ];
 
@@ -755,29 +741,38 @@
         id: crypto.randomUUID(),
         code: "CMB-DEMO-001",
         amount: 88000,
-        buyDate: "2026-04-01",
-        redeemDate: "2026-07-01",
         profit: 2160,
+        buyDate: "2026-04-01",
+        lockValue: 90,
+        lockUnit: "day",
         memo: "日常稳健仓位"
       },
       {
         id: crypto.randomUUID(),
         code: "CMB-DEMO-208",
         amount: 46000,
-        buyDate: "2026-02-15",
-        redeemDate: "2026-08-15",
         profit: 980,
+        buyDate: "2026-02-15",
+        lockValue: 6,
+        lockUnit: "month",
         memo: "平衡收益仓"
       },
       {
         id: crypto.randomUUID(),
         code: "CMB-DEMO-306",
         amount: 36000,
-        buyDate: "2025-12-20",
-        redeemDate: "2026-12-20",
         profit: -1260,
+        buyDate: "2025-12-20",
+        lockValue: 12,
+        lockUnit: "month",
         memo: "高波动进攻仓"
       }
+    ];
+
+    const templateHeaders = ["产品编号", "我买了多少钱", "我目前的收益", "买入时间", "封闭期数值", "封闭期单位", "备注"];
+    const templateRows = [
+      ["CMB-DEMO-001", "88000", "2160", "2026-04-01", "90", "天", "日常稳健仓位"],
+      ["CMB-DEMO-208", "46000", "980", "2026-02-15", "6", "个月", "平衡收益仓"]
     ];
 
     const escapeHtml = (value) => String(value ?? "")
@@ -806,42 +801,37 @@
       }).format(date);
     };
 
-    function loadState() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        return { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
+    const formatLockPeriod = (value, unit) => {
+      const num = Number(value || 0);
+      if (!num) return "-";
+      return `${num}${unit === "month" ? "个月" : "天"}`;
+    };
+
+    function addLockPeriod(buyDate, value, unit) {
+      if (!buyDate || !value) return "";
+      const date = new Date(`${buyDate}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return "";
+      if (unit === "month") {
+        const day = date.getDate();
+        date.setMonth(date.getMonth() + Number(value));
+        if (date.getDate() !== day) date.setDate(0);
+      } else {
+        date.setDate(date.getDate() + Number(value));
       }
-      try {
-        const parsed = JSON.parse(raw);
-        return {
-          profiles: Array.isArray(parsed.profiles) && parsed.profiles.length ? parsed.profiles : structuredClone(seedProfiles),
-          holdings: Array.isArray(parsed.holdings) ? parsed.holdings : structuredClone(seedHoldings)
-        };
-      } catch {
-        return { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
-      }
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     }
 
-    let state = loadState();
-    let editingProfileCode = null;
-    let editingHoldingId = null;
-    let activePanel = "profile";
-
-    const profileForm = document.getElementById("profileForm");
-    const holdingForm = document.getElementById("holdingForm");
-    const profileList = document.getElementById("profileList");
-    const holdingList = document.getElementById("holdingList");
-    const summaryGrid = document.getElementById("summaryGrid");
-    const livePreview = document.getElementById("livePreview");
-    const profileCodeList = document.getElementById("profileCodeList");
-    const overviewTableBody = document.getElementById("overviewTableBody");
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function getProfileByCode(code) {
-      return state.profiles.find((item) => item.code.trim().toUpperCase() === String(code || "").trim().toUpperCase());
+    function buildTemplateCsv() {
+      const lines = [templateHeaders.join(",")].concat(
+        templateRows.map((row) => row.map((cell) => {
+          const text = String(cell ?? "");
+          return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+        }).join(","))
+      );
+      return `\uFEFF${lines.join("\n")}`;
     }
 
     function riskScore(risk) {
@@ -854,13 +844,101 @@
       return 0;
     }
 
+    function getProductByCode(code) {
+      const normalized = String(code || "").trim().toUpperCase();
+      return productCatalog.find((item) => item.code === normalized) || null;
+    }
+
+    function normalizeHolding(raw) {
+      const code = String(raw.code || "").trim().toUpperCase();
+      const amount = Number(raw.amount || 0);
+      const profit = raw.profit === "" || raw.profit === null || raw.profit === undefined ? null : Number(raw.profit);
+      const buyDate = String(raw.buyDate || "").trim();
+      let lockValue = Number(raw.lockValue || 0);
+      let lockUnit = raw.lockUnit === "month" ? "month" : "day";
+
+      if (!lockValue && raw.redeemDate && buyDate) {
+        const start = new Date(`${buyDate}T00:00:00`);
+        const end = new Date(`${raw.redeemDate}T00:00:00`);
+        if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())) {
+          const days = Math.round((end - start) / 86400000);
+          lockValue = Math.max(days, 0);
+          lockUnit = "day";
+        }
+      }
+
+      return {
+        id: String(raw.id || crypto.randomUUID()),
+        code,
+        amount,
+        profit: Number.isNaN(profit) ? null : profit,
+        buyDate,
+        lockValue: Number.isFinite(lockValue) ? lockValue : 0,
+        lockUnit,
+        memo: String(raw.memo || "").trim()
+      };
+    }
+
+    function migrateLegacyData(parsed) {
+      const holdings = Array.isArray(parsed.holdings) ? parsed.holdings.map(normalizeHolding) : structuredClone(seedHoldings);
+      return { holdings };
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          return {
+            holdings: Array.isArray(parsed.holdings) && parsed.holdings.length ? parsed.holdings.map(normalizeHolding) : structuredClone(seedHoldings)
+          };
+        } catch {
+          return { holdings: structuredClone(seedHoldings) };
+        }
+      }
+
+      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy) {
+        try {
+          return migrateLegacyData(JSON.parse(legacy));
+        } catch {
+          return { holdings: structuredClone(seedHoldings) };
+        }
+      }
+      return { holdings: structuredClone(seedHoldings) };
+    }
+
+    let state = loadState();
+    let editingHoldingId = null;
+    let activePanel = "manual";
+    let importFeedback = "还没有上传表格。先下载模板，填完后再上传。";
+    let importFeedbackTone = "";
+
+    const holdingForm = document.getElementById("holdingForm");
+    const holdingList = document.getElementById("holdingList");
+    const summaryGrid = document.getElementById("summaryGrid");
+    const livePreview = document.getElementById("livePreview");
+    const productCodeList = document.getElementById("productCodeList");
+    const overviewTableBody = document.getElementById("overviewTableBody");
+    const importStatus = document.getElementById("importStatus");
+    const importFileInput = document.getElementById("importFileInput");
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getRedeemDate(holding) {
+      return addLockPeriod(holding.buyDate, holding.lockValue, holding.lockUnit);
+    }
+
     function suggestionForHolding(holding, profile, shareRatio) {
       if (!profile) {
-        return { label: "待补齐画像", reason: "先录该编号的产品画像，再判断是否赎回", tone: "pill" };
+        return { label: "待核对编号", reason: "该编号未命中当前产品库，先确认产品编号是否正确", tone: "pill" };
       }
 
       const now = new Date();
-      const redeemable = holding.redeemDate ? new Date(holding.redeemDate) <= now : false;
+      const redeemDate = getRedeemDate(holding);
+      const redeemable = redeemDate ? new Date(`${redeemDate}T00:00:00`) <= now : false;
       const inception = Number(profile.inceptionAnnualized) || 0;
       const threeMonth = Number(profile.threeMonthAnnualized) || 0;
       const oneMonth = Number(profile.oneMonthAnnualized) || 0;
@@ -892,11 +970,14 @@
         if (idx >= 0) source[idx] = withDraft; else source.unshift(withDraft);
       }
       const totalAmount = source.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-      const totalProfit = source.reduce((sum, item) => sum + (Number(item.profit) || 0), 0);
-      const redeemableCount = source.filter((item) => item.redeemDate && new Date(item.redeemDate) <= new Date()).length;
+      const totalProfit = source.reduce((sum, item) => sum + (item.profit === null ? 0 : Number(item.profit) || 0), 0);
+      const redeemableCount = source.filter((item) => {
+        const redeemDate = getRedeemDate(item);
+        return redeemDate && new Date(`${redeemDate}T00:00:00`) <= new Date();
+      }).length;
       const suggestedRedeemCount = source.filter((item) => {
         const ratio = totalAmount ? (Number(item.amount) || 0) / totalAmount : 0;
-        const suggestion = suggestionForHolding(item, getProfileByCode(item.code), ratio);
+        const suggestion = suggestionForHolding(item, getProductByCode(item.code), ratio);
         return ["建议部分赎回", "可考虑赎回"].includes(suggestion.label);
       }).length;
       return { totalAmount, totalProfit, redeemableCount, suggestedRedeemCount, totalCount: source.length };
@@ -910,7 +991,7 @@
       document.querySelectorAll(".entry-panel").forEach((panelNode) => {
         panelNode.classList.toggle("active", panelNode.id === `panel-${panel}`);
       });
-      document.getElementById("entryHintPill").textContent = panel === "profile" ? "当前录入：产品画像" : "当前录入：我的持仓";
+      document.getElementById("entryHintPill").textContent = panel === "manual" ? "当前录入：手动" : "当前录入：表格上传";
       renderLivePreview();
     }
 
@@ -919,7 +1000,7 @@
       const cards = [
         { label: "总持仓金额", value: formatCurrency(stats.totalAmount), sub: `${stats.totalCount} 条持仓` },
         { label: "当前总收益", value: formatCurrency(stats.totalProfit), sub: stats.totalProfit >= 0 ? "整体为正收益" : "整体为负收益", className: stats.totalProfit >= 0 ? "profit-positive" : "profit-negative" },
-        { label: "已可赎回", value: `${stats.redeemableCount} 个`, sub: "按可赎回时间统计" },
+        { label: "已可赎回", value: `${stats.redeemableCount} 个`, sub: "按自动计算日期统计" },
         { label: "重点关注", value: `${stats.suggestedRedeemCount} 个`, sub: "建议部分赎回 / 可考虑赎回" }
       ];
       summaryGrid.innerHTML = cards.map((card) => `
@@ -931,69 +1012,41 @@
       `).join("");
     }
 
-    function renderProfileOptions() {
-      profileCodeList.innerHTML = state.profiles
+    function renderProductOptions() {
+      productCodeList.innerHTML = productCatalog
         .slice()
         .sort((a, b) => a.code.localeCompare(b.code, "zh-CN"))
-        .map((profile) => `<option value="${escapeHtml(profile.code)}">${escapeHtml(profile.name)}</option>`)
+        .map((item) => `<option value="${escapeHtml(item.code)}">${escapeHtml(item.name)}</option>`)
         .join("");
     }
 
     function getOverviewRows() {
       const totalAmount = state.holdings.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-      const holdingRows = state.holdings.map((holding) => {
-        const profile = getProfileByCode(holding.code);
+      return state.holdings.map((holding) => {
+        const profile = getProductByCode(holding.code);
         const ratio = totalAmount ? (Number(holding.amount) || 0) / totalAmount : 0;
         const suggestion = suggestionForHolding(holding, profile, ratio);
         return {
-          key: holding.id,
+          id: holding.id,
           code: holding.code,
-          name: profile ? profile.name : "未匹配画像",
-          status: profile ? "画像 + 持仓" : "仅持仓",
+          name: profile ? profile.name : "未命中产品库",
           amount: formatCurrency(holding.amount),
           ratio: formatPercent(ratio * 100),
           buyDate: formatDate(holding.buyDate),
-          redeemDate: formatDate(holding.redeemDate),
-          profit: Number(holding.profit) || 0,
+          lockPeriod: formatLockPeriod(holding.lockValue, holding.lockUnit),
+          redeemDate: formatDate(getRedeemDate(holding)),
+          profit: holding.profit,
           suggestion: `${suggestion.label}｜${suggestion.reason}`,
-          risk: profile ? profile.risk : "-",
-          combo: profile ? profile.combo : "-",
-          nature: profile ? profile.nature : "-",
-          rules: profile ? profile.rules : "-",
-          inceptionAnnualized: profile ? formatPercent(profile.inceptionAnnualized) : "-",
-          threeMonthAnnualized: profile ? formatPercent(profile.threeMonthAnnualized) : "-",
-          oneMonthAnnualized: profile ? formatPercent(profile.oneMonthAnnualized) : "-",
-          tags: profile?.tags || "-",
+          risk: profile ? profile.risk : "待补齐",
+          combo: profile ? profile.combo : "待补齐",
+          nature: profile ? profile.nature : "待补齐",
+          rules: profile ? profile.rules : "待补齐",
+          inceptionAnnualized: profile ? formatPercent(profile.inceptionAnnualized) : "待补齐",
+          threeMonthAnnualized: profile ? formatPercent(profile.threeMonthAnnualized) : "待补齐",
+          oneMonthAnnualized: profile ? formatPercent(profile.oneMonthAnnualized) : "待补齐",
           memo: holding.memo || "-"
         };
       });
-
-      const usedCodes = new Set(state.holdings.map((holding) => String(holding.code || "").trim().toUpperCase()));
-      const profileOnlyRows = state.profiles
-        .filter((profile) => !usedCodes.has(String(profile.code || "").trim().toUpperCase()))
-        .map((profile) => ({
-          key: `profile-${profile.code}`,
-          code: profile.code,
-          name: profile.name,
-          status: "仅画像",
-          amount: "-",
-          ratio: "-",
-          buyDate: "-",
-          redeemDate: "-",
-          profit: null,
-          suggestion: "-",
-          risk: profile.risk,
-          combo: profile.combo,
-          nature: profile.nature,
-          rules: profile.rules,
-          inceptionAnnualized: formatPercent(profile.inceptionAnnualized),
-          threeMonthAnnualized: formatPercent(profile.threeMonthAnnualized),
-          oneMonthAnnualized: formatPercent(profile.oneMonthAnnualized),
-          tags: profile.tags || "-",
-          memo: "-"
-        }));
-
-      return [...holdingRows, ...profileOnlyRows];
     }
 
     function tableHtml(rows) {
@@ -1013,7 +1066,7 @@
       document.getElementById("overviewCountPill").textContent = `${rows.length} 行`;
 
       if (!rows.length) {
-        overviewTableBody.innerHTML = '<tr><td class="sticky-col" colspan="17" style="text-align:center; color: var(--muted);">还没有录入任何数据，先上面录画像或持仓。</td></tr>';
+        overviewTableBody.innerHTML = '<tr><td class="sticky-col" colspan="16" style="text-align:center; color: var(--muted);">还没有录入任何持仓，先在下面手动录入或上传表格。</td></tr>';
         return;
       }
 
@@ -1028,10 +1081,10 @@
               <div class="code">${escapeHtml(row.code)}</div>
               <div style="margin-top:6px; font-weight:700; width:128px; white-space:normal; line-height:1.45;">${escapeHtml(row.name)}</div>
             </td>
-            <td>${escapeHtml(row.status)}</td>
             <td>${escapeHtml(row.amount)}</td>
             <td>${escapeHtml(row.ratio)}</td>
             <td>${escapeHtml(row.buyDate)}</td>
+            <td>${escapeHtml(row.lockPeriod)}</td>
             <td>${escapeHtml(row.redeemDate)}</td>
             <td>${profitHtml}</td>
             <td class="wrap-col">${escapeHtml(row.suggestion)}</td>
@@ -1042,73 +1095,31 @@
             <td>${escapeHtml(row.inceptionAnnualized)}</td>
             <td>${escapeHtml(row.threeMonthAnnualized)}</td>
             <td>${escapeHtml(row.oneMonthAnnualized)}</td>
-            <td>${escapeHtml(row.tags)}</td>
             <td>${escapeHtml(row.memo)}</td>
           </tr>
         `;
       }).join("");
     }
 
-    function renderProfiles() {
-      document.getElementById("profileCountPill").textContent = `${state.profiles.length} 个产品`;
-      if (!state.profiles.length) {
-        profileList.innerHTML = '<div class="empty">还没有产品画像，先从上面的“录产品画像”开始。</div>';
-        return;
-      }
-
-      profileList.innerHTML = state.profiles
-        .slice()
-        .sort((a, b) => a.code.localeCompare(b.code, "zh-CN"))
-        .map((profile) => {
-          const riskTone = riskScore(profile.risk) >= 4 ? "warn" : "good";
-          return `
-            <article class="holding-card">
-              <div class="holding-top">
-                <div>
-                  <div class="code">${escapeHtml(profile.code)}</div>
-                  <div class="holding-name">${escapeHtml(profile.name)}</div>
-                  ${profile.tags ? `<div class="holding-note">${escapeHtml(profile.tags)}</div>` : ""}
-                </div>
-                <span class="pill ${riskTone}">${escapeHtml(profile.risk)}</span>
-              </div>
-              <div class="holding-body">
-                ${tableHtml([
-                  { label: "组合内容", value: profile.combo },
-                  { label: "产品性质", value: profile.nature },
-                  { label: "持有规则", value: profile.rules },
-                  { label: "成立以来年化", value: formatPercent(profile.inceptionAnnualized) },
-                  { label: "3个月年化", value: formatPercent(profile.threeMonthAnnualized) },
-                  { label: "1个月年化", value: formatPercent(profile.oneMonthAnnualized) }
-                ])}
-                <div class="button-row" style="margin-top: 12px;">
-                  <button class="btn btn-secondary" type="button" data-action="edit-profile" data-code="${escapeHtml(profile.code)}">编辑画像</button>
-                  <button class="btn btn-ghost" type="button" data-action="delete-profile" data-code="${escapeHtml(profile.code)}">删除</button>
-                </div>
-              </div>
-            </article>
-          `;
-        }).join("");
-    }
-
     function renderHoldings() {
       document.getElementById("holdingCountPill").textContent = `${state.holdings.length} 条持仓`;
       if (!state.holdings.length) {
-        holdingList.innerHTML = '<div class="empty">还没有持仓记录。去“录我的持仓”里新增一条，下面就会自动出现表格卡片。</div>';
+        holdingList.innerHTML = '<div class="empty">还没有持仓记录。去“主动录入”里新增一条，或者用模板批量上传。</div>';
         return;
       }
 
       const totalAmount = state.holdings.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
       holdingList.innerHTML = state.holdings.map((holding) => {
-        const profile = getProfileByCode(holding.code);
+        const profile = getProductByCode(holding.code);
         const ratio = totalAmount ? (Number(holding.amount) || 0) / totalAmount : 0;
         const suggestion = suggestionForHolding(holding, profile, ratio);
-        const profitClass = Number(holding.profit) >= 0 ? "profit-positive" : "profit-negative";
+        const profitClass = holding.profit === null ? "" : holding.profit >= 0 ? "profit-positive" : "profit-negative";
         return `
           <article class="holding-card">
             <div class="holding-top">
               <div>
                 <div class="code">${escapeHtml(holding.code)}</div>
-                <div class="holding-name">${profile ? escapeHtml(profile.name) : "未匹配画像"}</div>
+                <div class="holding-name">${profile ? escapeHtml(profile.name) : "未命中产品库"}</div>
                 ${holding.memo ? `<div class="holding-note">${escapeHtml(holding.memo)}</div>` : ""}
               </div>
               <span class="pill ${suggestion.tone}">${escapeHtml(suggestion.label)}</span>
@@ -1118,15 +1129,16 @@
                 { label: "我买了多少钱", value: formatCurrency(holding.amount) },
                 { label: "占总持仓百分比", value: formatPercent(ratio * 100) },
                 { label: "买入时间", value: formatDate(holding.buyDate) },
-                { label: "可以赎回时间", value: formatDate(holding.redeemDate) },
-                { label: "我目前的收益", value: `<span class="${profitClass}">${escapeHtml(formatCurrency(holding.profit))}</span>`, raw: true },
-                { label: "风险等级", value: profile ? profile.risk : "-" },
-                { label: "组合", value: profile ? profile.combo : "-" },
-                { label: "产品性质", value: profile ? profile.nature : "-" },
-                { label: "持有规则", value: profile ? profile.rules : "-" },
-                { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "-" },
-                { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "-" },
-                { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "-" },
+                { label: "封闭期", value: formatLockPeriod(holding.lockValue, holding.lockUnit) },
+                { label: "可以赎回时间", value: formatDate(getRedeemDate(holding)) },
+                { label: "我目前的收益", value: holding.profit === null ? "-" : `<span class="${profitClass}">${escapeHtml(formatCurrency(holding.profit))}</span>`, raw: true },
+                { label: "风险等级", value: profile ? profile.risk : "待补齐" },
+                { label: "组合", value: profile ? profile.combo : "待补齐" },
+                { label: "产品性质", value: profile ? profile.nature : "待补齐" },
+                { label: "持有规则", value: profile ? profile.rules : "待补齐" },
+                { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "待补齐" },
+                { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "待补齐" },
+                { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "待补齐" },
                 { label: "是否建议赎回", value: `${suggestion.label}｜${suggestion.reason}` }
               ])}
               <div class="button-row" style="margin-top: 12px;">
@@ -1139,81 +1151,54 @@
       }).join("");
     }
 
-    function currentProfileDraft() {
-      return {
-        code: String(profileForm.code.value || "").trim().toUpperCase(),
-        name: String(profileForm.name.value || "").trim(),
-        risk: String(profileForm.risk.value || "R1 低风险"),
-        combo: String(profileForm.combo.value || "").trim(),
-        nature: String(profileForm.nature.value || "").trim(),
-        rules: String(profileForm.rules.value || "").trim(),
-        inceptionAnnualized: Number(profileForm.inceptionAnnualized.value || 0),
-        threeMonthAnnualized: Number(profileForm.threeMonthAnnualized.value || 0),
-        oneMonthAnnualized: Number(profileForm.oneMonthAnnualized.value || 0),
-        tags: String(profileForm.tags.value || "").trim()
-      };
+    function currentHoldingDraft() {
+      const profitRaw = String(holdingForm.profit.value || "").trim();
+      const lockValue = Number(holdingForm.lockValue.value || 0);
+      return normalizeHolding({
+        id: editingHoldingId || "draft-holding",
+        code: holdingForm.code.value,
+        amount: holdingForm.amount.value,
+        profit: profitRaw === "" ? null : profitRaw,
+        buyDate: holdingForm.buyDate.value,
+        lockValue,
+        lockUnit: holdingForm.lockUnit.value,
+        memo: holdingForm.memo.value
+      });
     }
 
-    function currentHoldingDraft() {
-      return {
-        id: editingHoldingId || "draft-holding",
-        code: String(holdingForm.code.value || "").trim().toUpperCase(),
-        amount: Number(holdingForm.amount.value || 0),
-        buyDate: String(holdingForm.buyDate.value || ""),
-        redeemDate: String(holdingForm.redeemDate.value || ""),
-        profit: Number(holdingForm.profit.value || 0),
-        memo: String(holdingForm.memo.value || "").trim()
-      };
+    function renderComputedRedeemDate() {
+      const draft = currentHoldingDraft();
+      holdingForm.redeemDate.value = getRedeemDate(draft);
     }
 
     function renderLivePreview() {
-      if (activePanel === "profile") {
-        const draft = currentProfileDraft();
-        if (!draft.code && !draft.name) {
-          livePreview.className = "live-block empty";
-          livePreview.innerHTML = '<div class="mini">开始输入产品编号、风险等级、组合内容等，下面会即时显示画像表格预览。</div>';
-          return;
-        }
-        livePreview.className = "live-block";
-        document.getElementById("previewPill").textContent = draft.code ? `预览 ${draft.code}` : "实时预览";
-        livePreview.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px;">
-            <div>
-              <div class="code">${escapeHtml(draft.code || "未填写编号")}</div>
-              <div class="holding-name" style="margin-top:8px;">${escapeHtml(draft.name || "未填写产品名称")}</div>
-            </div>
-            <span class="pill ${riskScore(draft.risk) >= 4 ? "warn" : "good"}">${escapeHtml(draft.risk || "待定")}</span>
-          </div>
-          ${tableHtml([
-            { label: "组合内容", value: draft.combo || "待填写" },
-            { label: "产品性质", value: draft.nature || "待填写" },
-            { label: "持有规则", value: draft.rules || "待填写" },
-            { label: "成立以来年化", value: draft.inceptionAnnualized ? formatPercent(draft.inceptionAnnualized) : "待填写" },
-            { label: "3个月年化", value: draft.threeMonthAnnualized ? formatPercent(draft.threeMonthAnnualized) : "待填写" },
-            { label: "1个月年化", value: draft.oneMonthAnnualized ? formatPercent(draft.oneMonthAnnualized) : "待填写" }
-          ])}
-        `;
+      if (activePanel === "import") {
+        livePreview.className = "live-block empty";
+        document.getElementById("previewPill").textContent = "批量导入";
+        livePreview.innerHTML = '<div class="mini">下载模板后按列填写，再上传 CSV。系统会根据产品编号自动补齐已知产品信息，并自动计算可赎回时间。</div>';
         return;
       }
 
       const draft = currentHoldingDraft();
-      if (!draft.code && !draft.amount && !draft.buyDate && !draft.redeemDate && !draft.profit) {
+      renderComputedRedeemDate();
+      if (!draft.code && !draft.amount && !draft.buyDate && !draft.lockValue && draft.profit === null) {
         livePreview.className = "live-block empty";
-        livePreview.innerHTML = '<div class="mini">开始输入产品编号、金额、买入时间、可赎回时间和收益，下面会即时显示持仓表格预览。</div>';
+        livePreview.innerHTML = '<div class="mini">开始输入产品编号、金额、买入时间和封闭期，下面会即时显示持仓预览。</div>';
+        document.getElementById("previewPill").textContent = "实时预览";
         return;
       }
-      const profile = getProfileByCode(draft.code);
+      const profile = getProductByCode(draft.code);
       const totals = getTotals(draft);
       const ratio = totals.totalAmount ? (Number(draft.amount) || 0) / totals.totalAmount : 0;
       const suggestion = suggestionForHolding(draft, profile, ratio);
-      const profitClass = Number(draft.profit) >= 0 ? "profit-positive" : "profit-negative";
+      const profitClass = draft.profit === null ? "" : draft.profit >= 0 ? "profit-positive" : "profit-negative";
       livePreview.className = profile ? "live-block" : "live-block empty";
       document.getElementById("previewPill").textContent = draft.code ? `预览 ${draft.code}` : "实时预览";
       livePreview.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px;">
           <div>
             <div class="code">${escapeHtml(draft.code || "未填写编号")}</div>
-            <div class="holding-name" style="margin-top:8px;">${profile ? escapeHtml(profile.name) : "未匹配画像"}</div>
+            <div class="holding-name" style="margin-top:8px;">${profile ? escapeHtml(profile.name) : "未命中产品库"}</div>
             ${draft.memo ? `<div class="holding-note">${escapeHtml(draft.memo)}</div>` : ""}
           </div>
           <span class="pill ${suggestion.tone}">${escapeHtml(suggestion.label)}</span>
@@ -1222,47 +1207,26 @@
           { label: "我买了多少钱", value: draft.amount ? formatCurrency(draft.amount) : "待填写" },
           { label: "占总持仓百分比", value: draft.amount ? formatPercent(ratio * 100) : "待填写" },
           { label: "买入时间", value: draft.buyDate ? formatDate(draft.buyDate) : "待填写" },
-          { label: "可以赎回时间", value: draft.redeemDate ? formatDate(draft.redeemDate) : "待填写" },
-          { label: "我目前的收益", value: draft.profit || draft.profit === 0 ? `<span class="${profitClass}">${escapeHtml(formatCurrency(draft.profit))}</span>` : "待填写", raw: true },
-          { label: "风险等级", value: profile ? profile.risk : "请先补录画像" },
-          { label: "组合", value: profile ? profile.combo : "请先补录画像" },
-          { label: "产品性质", value: profile ? profile.nature : "请先补录画像" },
-          { label: "持有规则", value: profile ? profile.rules : "请先补录画像" },
-          { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "请先补录画像" },
-          { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "请先补录画像" },
-          { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "请先补录画像" },
+          { label: "封闭期", value: draft.lockValue ? formatLockPeriod(draft.lockValue, draft.lockUnit) : "待填写" },
+          { label: "可以赎回时间", value: getRedeemDate(draft) ? formatDate(getRedeemDate(draft)) : "待计算" },
+          { label: "我目前的收益", value: draft.profit === null ? "-" : `<span class="${profitClass}">${escapeHtml(formatCurrency(draft.profit))}</span>`, raw: true },
+          { label: "风险等级", value: profile ? profile.risk : "待自动补齐" },
+          { label: "组合", value: profile ? profile.combo : "待自动补齐" },
+          { label: "产品性质", value: profile ? profile.nature : "待自动补齐" },
+          { label: "持有规则", value: profile ? profile.rules : "待自动补齐" },
+          { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "待自动补齐" },
+          { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "待自动补齐" },
+          { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "待自动补齐" },
           { label: "是否建议赎回", value: `${suggestion.label}｜${suggestion.reason}` }
         ])}
       `;
     }
 
-    function resetProfileForm() {
-      editingProfileCode = null;
-      profileForm.reset();
-      profileForm.risk.value = "R1 低风险";
-      renderLivePreview();
-    }
-
     function resetHoldingForm() {
       editingHoldingId = null;
       holdingForm.reset();
-      renderLivePreview();
-    }
-
-    function fillProfileForm(profile) {
-      editingProfileCode = profile.code;
-      profileForm.code.value = profile.code;
-      profileForm.name.value = profile.name;
-      profileForm.risk.value = profile.risk;
-      profileForm.nature.value = profile.nature;
-      profileForm.combo.value = profile.combo;
-      profileForm.rules.value = profile.rules;
-      profileForm.inceptionAnnualized.value = profile.inceptionAnnualized;
-      profileForm.threeMonthAnnualized.value = profile.threeMonthAnnualized;
-      profileForm.oneMonthAnnualized.value = profile.oneMonthAnnualized;
-      profileForm.tags.value = profile.tags || "";
-      setActivePanel("profile");
-      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+      holdingForm.lockUnit.value = "day";
+      holdingForm.redeemDate.value = "";
       renderLivePreview();
     }
 
@@ -1270,71 +1234,173 @@
       editingHoldingId = holding.id;
       holdingForm.code.value = holding.code;
       holdingForm.amount.value = holding.amount;
+      holdingForm.profit.value = holding.profit === null ? "" : holding.profit;
       holdingForm.buyDate.value = holding.buyDate;
-      holdingForm.redeemDate.value = holding.redeemDate;
-      holdingForm.profit.value = holding.profit;
+      holdingForm.lockValue.value = holding.lockValue;
+      holdingForm.lockUnit.value = holding.lockUnit;
       holdingForm.memo.value = holding.memo || "";
-      setActivePanel("holding");
-      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+      renderComputedRedeemDate();
+      setActivePanel("manual");
+      document.querySelector(".app-scroll").scrollTo({ top: document.getElementById("entryCard").offsetTop - 12, behavior: "smooth" });
       renderLivePreview();
     }
 
-    function restoreSeed() {
-      if (!window.confirm("确定恢复示例数据吗？当前数据会被示例覆盖。")) return;
-      state = { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
-      saveState();
-      resetProfileForm();
-      resetHoldingForm();
-      renderAll();
+    function upsertHolding(draft) {
+      const matchIndex = state.holdings.findIndex((item) => item.id === draft.id || (item.code === draft.code && item.buyDate === draft.buyDate));
+      if (matchIndex >= 0) state.holdings[matchIndex] = draft;
+      else state.holdings.unshift(draft);
     }
 
-    function exportData() {
-      const payload = { exportedAt: new Date().toISOString(), profiles: state.profiles, holdings: state.holdings };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    function parseCsv(text) {
+      const rows = [];
+      let current = "";
+      let row = [];
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            current += '"';
+            i += 1;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === "," && !inQuotes) {
+          row.push(current);
+          current = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") i += 1;
+          row.push(current);
+          if (row.some((cell) => String(cell).trim() !== "")) rows.push(row);
+          row = [];
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      row.push(current);
+      if (row.some((cell) => String(cell).trim() !== "")) rows.push(row);
+      return rows;
+    }
+
+    function normalizeHeader(text) {
+      return String(text || "").replaceAll(/\s+/g, "").trim();
+    }
+
+    function parseLockPeriodText(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return { lockValue: 0, lockUnit: "day" };
+      const monthMatch = raw.match(/(\d+(?:\.\d+)?)\s*(个?月)/);
+      if (monthMatch) return { lockValue: Number(monthMatch[1]), lockUnit: "month" };
+      const dayMatch = raw.match(/(\d+(?:\.\d+)?)\s*天/);
+      if (dayMatch) return { lockValue: Number(dayMatch[1]), lockUnit: "day" };
+      const onlyNumber = Number(raw);
+      return { lockValue: Number.isFinite(onlyNumber) ? onlyNumber : 0, lockUnit: "day" };
+    }
+
+    function parseImportRows(text) {
+      const rows = parseCsv(text);
+      if (rows.length < 2) throw new Error("表格里至少需要 1 行数据。");
+      const headers = rows[0].map(normalizeHeader);
+      const headerIndex = (names) => names.map(normalizeHeader).find((name) => headers.includes(name));
+
+      const codeHeader = headerIndex(["产品编号", "编号", "code", "productcode"]);
+      const amountHeader = headerIndex(["我买了多少钱", "买入金额", "持仓金额", "amount"]);
+      const profitHeader = headerIndex(["我目前的收益", "当前收益", "收益", "profit"]);
+      const buyDateHeader = headerIndex(["买入时间", "买入日期", "buydate"]);
+      const lockValueHeader = headerIndex(["封闭期数值", "封闭期", "lockvalue"]);
+      const lockUnitHeader = headerIndex(["封闭期单位", "lockunit"]);
+      const memoHeader = headerIndex(["备注", "memo", "note"]);
+
+      if (!codeHeader || !amountHeader || !buyDateHeader || !lockValueHeader) {
+        throw new Error("模板列不完整。至少需要：产品编号、我买了多少钱、买入时间、封闭期数值。");
+      }
+
+      const getValue = (cells, header) => {
+        const index = headers.indexOf(header);
+        return index >= 0 ? String(cells[index] || "").trim() : "";
+      };
+
+      return rows.slice(1).map((cells, index) => {
+        const rawLockValue = getValue(cells, lockValueHeader);
+        const parsedPeriod = lockUnitHeader ? { lockValue: Number(rawLockValue || 0), lockUnit: /月/.test(getValue(cells, lockUnitHeader)) ? "month" : "day" } : parseLockPeriodText(rawLockValue);
+        const code = getValue(cells, codeHeader).toUpperCase();
+        const amount = Number(getValue(cells, amountHeader) || 0);
+        const buyDate = getValue(cells, buyDateHeader);
+        const profitRaw = profitHeader ? getValue(cells, profitHeader) : "";
+        const memo = memoHeader ? getValue(cells, memoHeader) : "";
+
+        if (!code || !amount || !buyDate || !parsedPeriod.lockValue) {
+          throw new Error(`第 ${index + 2} 行有必填项为空，请检查产品编号、金额、买入时间和封闭期。`);
+        }
+
+        return normalizeHolding({
+          code,
+          amount,
+          profit: profitRaw === "" ? null : profitRaw,
+          buyDate,
+          lockValue: parsedPeriod.lockValue,
+          lockUnit: parsedPeriod.lockUnit,
+          memo
+        });
+      });
+    }
+
+    function setImportFeedback(message, tone = "") {
+      importFeedback = message;
+      importFeedbackTone = tone;
+      importStatus.className = `import-status${tone ? ` ${tone}` : ""}`;
+      importStatus.textContent = message;
+    }
+
+    function downloadTemplate() {
+      const blob = new Blob([buildTemplateCsv()], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `wealth-management-iphone-${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = "wealth-import-template.csv";
       link.click();
       URL.revokeObjectURL(url);
     }
 
-    profileForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const draft = currentProfileDraft();
-      const index = state.profiles.findIndex((item) => item.code === editingProfileCode || item.code === draft.code);
-      if (index >= 0) state.profiles[index] = draft; else state.profiles.unshift(draft);
-      saveState();
-      resetProfileForm();
-      renderAll();
-    });
+    function exportData() {
+      const rows = [templateHeaders].concat(
+        state.holdings.map((holding) => [
+          holding.code,
+          String(holding.amount),
+          holding.profit === null ? "" : String(holding.profit),
+          holding.buyDate,
+          String(holding.lockValue),
+          holding.lockUnit === "month" ? "个月" : "天",
+          holding.memo || ""
+        ])
+      );
+      const csv = `\uFEFF${rows.map((row) => row.map((cell) => {
+        const text = String(cell ?? "");
+        return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+      }).join(",")).join("\n")}`;
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `wealth-management-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
 
     holdingForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const draft = currentHoldingDraft();
-      const index = state.holdings.findIndex((item) => item.id === draft.id);
-      if (index >= 0) state.holdings[index] = draft; else state.holdings.unshift(draft);
+      if (!draft.code || !draft.amount || !draft.buyDate || !draft.lockValue) {
+        window.alert("请至少填完产品编号、买入金额、买入时间和封闭期。");
+        return;
+      }
+      upsertHolding(draft);
       saveState();
       resetHoldingForm();
       renderAll();
-    });
-
-    profileList.addEventListener("click", (event) => {
-      const button = event.target.closest("button[data-action]");
-      if (!button) return;
-      const code = button.dataset.code;
-      const action = button.dataset.action;
-      const profile = getProfileByCode(code);
-      if (!profile) return;
-      if (action === "edit-profile") fillProfileForm(profile);
-      if (action === "delete-profile") {
-        const usedCount = state.holdings.filter((item) => item.code === code).length;
-        const message = usedCount ? `该画像已被 ${usedCount} 条持仓引用，删除后这些持仓将显示未匹配画像，确定删除吗？` : "确定删除这条画像吗？";
-        if (!window.confirm(message)) return;
-        state.profiles = state.profiles.filter((item) => item.code !== code);
-        saveState();
-        renderAll();
-      }
     });
 
     holdingList.addEventListener("click", (event) => {
@@ -1358,36 +1424,54 @@
     });
 
     [
-      profileForm.code, profileForm.name, profileForm.risk, profileForm.nature, profileForm.combo,
-      profileForm.rules, profileForm.inceptionAnnualized, profileForm.threeMonthAnnualized,
-      profileForm.oneMonthAnnualized, profileForm.tags,
-      holdingForm.code, holdingForm.amount, holdingForm.profit, holdingForm.buyDate,
-      holdingForm.redeemDate, holdingForm.memo
+      holdingForm.code,
+      holdingForm.amount,
+      holdingForm.profit,
+      holdingForm.buyDate,
+      holdingForm.lockValue,
+      holdingForm.lockUnit,
+      holdingForm.memo
     ].forEach((field) => field.addEventListener("input", renderLivePreview));
 
-    document.getElementById("profileResetBtn").addEventListener("click", resetProfileForm);
-    document.getElementById("holdingResetBtn").addEventListener("click", resetHoldingForm);
-    document.getElementById("seedBtn").addEventListener("click", restoreSeed);
-    document.getElementById("exportBtn").addEventListener("click", exportData);
-    document.getElementById("jumpProfileBtn").addEventListener("click", () => {
-      setActivePanel("profile");
-      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+    importFileInput.addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const rows = parseImportRows(text);
+        rows.forEach(upsertHolding);
+        saveState();
+        renderAll();
+        setImportFeedback(`已导入 ${rows.length} 条记录。相同“产品编号 + 买入时间”的旧记录已自动覆盖。`, "success");
+      } catch (error) {
+        setImportFeedback(error instanceof Error ? error.message : "导入失败，请检查模板格式。", "error");
+      } finally {
+        event.target.value = "";
+      }
     });
-    document.getElementById("jumpHoldingBtn").addEventListener("click", () => {
-      setActivePanel("holding");
-      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+
+    document.getElementById("holdingResetBtn").addEventListener("click", resetHoldingForm);
+    document.getElementById("downloadTemplateBtn").addEventListener("click", downloadTemplate);
+    document.getElementById("exportBtn").addEventListener("click", exportData);
+    document.getElementById("jumpManualBtn").addEventListener("click", () => {
+      setActivePanel("manual");
+      document.querySelector(".app-scroll").scrollTo({ top: document.getElementById("entryCard").offsetTop - 12, behavior: "smooth" });
+    });
+    document.getElementById("jumpImportBtn").addEventListener("click", () => {
+      setActivePanel("import");
+      document.querySelector(".app-scroll").scrollTo({ top: document.getElementById("entryCard").offsetTop - 12, behavior: "smooth" });
     });
 
     function renderAll() {
       renderSummary();
-      renderProfileOptions();
+      renderProductOptions();
       renderOverviewTable();
-      renderProfiles();
       renderHoldings();
       renderLivePreview();
+      setImportFeedback(importFeedback, importFeedbackTone);
     }
 
-    setActivePanel("profile");
+    setActivePanel("manual");
     renderAll();
   </script>
 </body>
