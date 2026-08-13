@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>我的理财</title>
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --panel: #fffdf8;
+      --panel-soft: #f4efe4;
+      --line: #e6ddcc;
+      --line-strong: #d8ccb7;
+      --text: #243126;
+      --muted: #6c766d;
+      --brand: #4d8b66;
+      --brand-soft: #e9f2eb;
+      --accent: #b88242;
+      --gain: #d84a4a;
+      --loss: #2c8b58;
+      --warn: #a76b20;
+      --danger-soft: #fdeeed;
+      --shadow: 0 16px 34px rgba(40, 56, 43, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --phone-w: min(100vw, 428px);
+      --phone-h: 926px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #fbf8f2 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 24px;
+    }
+
+    .phone-frame {
+      width: var(--phone-w);
+      min-height: min(100dvh - 36px, var(--phone-h));
+      background: #1f261f;
+      border-radius: 42px;
+      padding: 10px;
+      box-shadow: 0 22px 50px rgba(36, 49, 38, 0.16);
+    }
+
+    .screen {
+      background: linear-gradient(180deg, #faf7f0 0%, #f6f1e7 100%);
+      border-radius: 34px;
+      min-height: calc(min(100dvh - 36px, var(--phone-h)) - 20px);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: max(18px, env(safe-area-inset-top)) 22px 8px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .notch {
+      width: 126px;
+      height: 28px;
+      background: #1f261f;
+      border-radius: 0 0 18px 18px;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .app-scroll {
+      flex: 1;
+      overflow: auto;
+      padding: 4px 16px calc(104px + env(safe-area-inset-bottom));
+    }
+
+    .hero {
+      padding: 14px 14px 12px;
+      background: linear-gradient(145deg, rgba(77, 139, 102, 0.1), rgba(255, 253, 248, 0.9));
+      border: 1px solid rgba(77, 139, 102, 0.14);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .card-head {
+      padding: 18px 18px 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-head h2,
+    .card-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .card-head p {
+      margin: 6px 0 0;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .card-body {
+      padding: 0 18px 18px;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--panel-soft);
+      color: var(--muted);
+      border: 1px solid rgba(0,0,0,0.04);
+      white-space: nowrap;
+    }
+
+    .pill.good { background: #eaf5ee; color: var(--loss); }
+    .pill.warn { background: #fff2de; color: var(--warn); }
+    .pill.danger { background: #fdeaea; color: var(--gain); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .summary-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-item .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .summary-item .value {
+      font-size: 23px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      line-height: 1.15;
+    }
+
+    .summary-item .sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 8px;
+      background: var(--panel-soft);
+      border-radius: 18px;
+      margin-bottom: 14px;
+    }
+
+    .segment-btn {
+      border: 0;
+      padding: 12px 10px;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .segment-btn.active {
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 10px 20px rgba(54, 72, 56, 0.08);
+    }
+
+    .entry-panel { display: none; }
+    .entry-panel.active { display: block; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .span-2 { grid-column: span 2; }
+
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 13px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .textarea {
+      min-height: 86px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(77, 139, 102, 0.62);
+      box-shadow: 0 0 0 4px rgba(77, 139, 102, 0.12);
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 15px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-secondary { background: var(--brand-soft); color: var(--brand); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .live-block {
+      background: linear-gradient(145deg, rgba(77, 139, 102, 0.08), rgba(255, 248, 236, 0.8));
+      border: 1px dashed rgba(77, 139, 102, 0.28);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .live-block.empty {
+      background: #fbf8f1;
+      border-color: var(--line);
+    }
+
+    .table-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .overview-scroll {
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .overview-table {
+      min-width: 1680px;
+      width: max-content;
+      border-collapse: collapse;
+    }
+
+    .overview-table th,
+    .overview-table td {
+      width: auto;
+      white-space: nowrap;
+      border-right: 1px solid #efe7d7;
+    }
+
+    .overview-table th:last-child,
+    .overview-table td:last-child {
+      border-right: 0;
+    }
+
+    .overview-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #fbf8f1;
+    }
+
+    .overview-table .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      min-width: 128px;
+      max-width: 140px;
+      background: #fffdf8;
+      box-shadow: 1px 0 0 #efe7d7;
+    }
+
+    .overview-table thead .sticky-col {
+      z-index: 3;
+      background: #fbf8f1;
+    }
+
+    .overview-table .wrap-col {
+      white-space: normal;
+      min-width: 220px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      text-align: left;
+      font-size: 13px;
+      vertical-align: top;
+      border-bottom: 1px solid #efe7d7;
+      line-height: 1.55;
+    }
+
+    th {
+      width: 36%;
+      background: #fbf8f1;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    tr:last-child th,
+    tr:last-child td { border-bottom: 0; }
+
+    .code {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: var(--panel-soft);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+    }
+
+    .profit-positive { color: var(--gain); font-weight: 700; }
+    .profit-negative { color: var(--loss); font-weight: 700; }
+
+    .holding-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .holding-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .holding-top {
+      padding: 16px 16px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .holding-name {
+      margin-top: 6px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .holding-note {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .holding-body {
+      padding: 0 16px 16px;
+    }
+
+    .empty {
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      background: var(--panel);
+      border: 1px dashed var(--line-strong);
+      border-radius: 18px;
+    }
+
+    .bottom-bar {
+      position: sticky;
+      bottom: 0;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(250, 247, 240, 0.86);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(216, 204, 183, 0.75);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 430px) {
+      body { padding: 0; }
+      .phone-frame { width: 100vw; min-height: 100dvh; border-radius: 0; padding: 0; }
+      .screen { min-height: 100dvh; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>15:12</span>
+        <span></span>
+        <span>100%</span>
+      </div>
+
+      <div class="app-scroll">
+        <section class="hero">
+          <p>录入画像和持仓后，下面的预览、总览表格和持仓卡片会自动联动更新。现在这版更适合手机直接录入和查看。</p>
+          <div class="top-actions">
+            <button class="btn btn-secondary" id="exportBtn">导出数据</button>
+            <button class="btn btn-ghost" id="seedBtn">恢复示例</button>
+          </div>
+        </section>
+
+        <section class="summary-grid" id="summaryGrid"></section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>总览表格</h2>
+              <p>把你已录入的画像和持仓放进同一张横向表里。左右滑动可以一次看全所有字段。</p>
+            </div>
+            <span class="pill" id="overviewCountPill">0 行</span>
+          </div>
+          <div class="card-body">
+            <div class="mini">横向表格会优先展示持仓数据；仅录了画像、还没录持仓的产品，也会单独列一行显示。</div>
+            <div style="height: 12px;"></div>
+            <div class="overview-scroll">
+              <table class="overview-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col">编号 / 名称</th>
+                    <th>数据状态</th>
+                    <th>我买了多少钱</th>
+                    <th>占总持仓百分比</th>
+                    <th>买入时间</th>
+                    <th>可以赎回时间</th>
+                    <th>我目前的收益</th>
+                    <th>是否建议赎回</th>
+                    <th>风险等级</th>
+                    <th class="wrap-col">组合</th>
+                    <th>产品性质</th>
+                    <th class="wrap-col">持有规则</th>
+                    <th>成立以来年化</th>
+                    <th>3个月年化</th>
+                    <th>1个月年化</th>
+                    <th>标签</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody id="overviewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>主动录入</h2>
+              <p>先录产品画像，再录持仓。录入时会即时联动下方的预览表格。</p>
+            </div>
+            <span class="pill" id="entryHintPill">画像 / 持仓</span>
+          </div>
+          <div class="card-body">
+            <div class="segmented">
+              <button class="segment-btn active" type="button" data-panel="profile">录产品画像</button>
+              <button class="segment-btn" type="button" data-panel="holding">录我的持仓</button>
+            </div>
+
+            <div class="entry-panel active" id="panel-profile">
+              <form id="profileForm">
+                <div class="grid">
+                  <div class="field span-2">
+                    <label for="profileCode">产品编号</label>
+                    <input class="input" id="profileCode" name="code" placeholder="如 CMB-DEMO-001" required />
+                  </div>
+                  <div class="field span-2">
+                    <label for="profileName">产品名称</label>
+                    <input class="input" id="profileName" name="name" placeholder="如 示例-稳健固收+" required />
+                  </div>
+                  <div class="field">
+                    <label for="profileRisk">风险等级</label>
+                    <select class="select" id="profileRisk" name="risk" required>
+                      <option value="R1 低风险">R1 低风险</option>
+                      <option value="R2 中低风险">R2 中低风险</option>
+                      <option value="R3 中风险">R3 中风险</option>
+                      <option value="R4 中高风险">R4 中高风险</option>
+                      <option value="R5 高风险">R5 高风险</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="profileNature">产品性质</label>
+                    <input class="input" id="profileNature" name="nature" placeholder="固收增强 / 多资产" required />
+                  </div>
+                  <div class="field span-2">
+                    <label for="profileCombo">组合内容</label>
+                    <textarea class="textarea" id="profileCombo" name="combo" placeholder="如 债券70%，现金20%，权益10%" required></textarea>
+                  </div>
+                  <div class="field span-2">
+                    <label for="profileRules">持有规则</label>
+                    <textarea class="textarea" id="profileRules" name="rules" placeholder="如 最短持有90天，到期后每个开放日可赎回" required></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="profileInception">成立以来年化（%）</label>
+                    <input class="input" id="profileInception" name="inceptionAnnualized" type="number" step="0.01" required />
+                  </div>
+                  <div class="field">
+                    <label for="profileThreeMonth">3个月年化（%）</label>
+                    <input class="input" id="profileThreeMonth" name="threeMonthAnnualized" type="number" step="0.01" required />
+                  </div>
+                  <div class="field">
+                    <label for="profileOneMonth">1个月年化（%）</label>
+                    <input class="input" id="profileOneMonth" name="oneMonthAnnualized" type="number" step="0.01" required />
+                  </div>
+                  <div class="field">
+                    <label for="profileTags">补充标签</label>
+                    <input class="input" id="profileTags" name="tags" placeholder="如 稳健仓位" />
+                  </div>
+                </div>
+                <div class="button-row">
+                  <button class="btn btn-primary" type="submit">保存画像</button>
+                  <button class="btn btn-ghost" type="button" id="profileResetBtn">清空</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="entry-panel" id="panel-holding">
+              <form id="holdingForm">
+                <div class="grid">
+                  <div class="field span-2">
+                    <label for="holdingCode">产品编号</label>
+                    <input class="input" id="holdingCode" name="code" list="profileCodeList" placeholder="输入或选择已有编号" required />
+                    <datalist id="profileCodeList"></datalist>
+                  </div>
+                  <div class="field">
+                    <label for="holdingAmount">我买了多少钱（¥）</label>
+                    <input class="input" id="holdingAmount" name="amount" type="number" step="0.01" required />
+                  </div>
+                  <div class="field">
+                    <label for="holdingProfit">我目前的收益（¥）</label>
+                    <input class="input" id="holdingProfit" name="profit" type="number" step="0.01" required />
+                  </div>
+                  <div class="field">
+                    <label for="holdingBuyDate">买入时间</label>
+                    <input class="input" id="holdingBuyDate" name="buyDate" type="date" required />
+                  </div>
+                  <div class="field">
+                    <label for="holdingRedeemDate">可以赎回的时间</label>
+                    <input class="input" id="holdingRedeemDate" name="redeemDate" type="date" required />
+                  </div>
+                  <div class="field span-2">
+                    <label for="holdingMemo">备注</label>
+                    <input class="input" id="holdingMemo" name="memo" placeholder="如 备用金仓位 / 计划换仓" />
+                  </div>
+                </div>
+                <div class="button-row">
+                  <button class="btn btn-primary" type="submit">保存持仓</button>
+                  <button class="btn btn-ghost" type="button" id="holdingResetBtn">清空</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h3>录入联动预览</h3>
+              <p>你填写的内容会即时变化，未保存前也能先看到表格结果。</p>
+            </div>
+            <span class="pill" id="previewPill">实时预览</span>
+          </div>
+          <div class="card-body">
+            <div class="live-block empty" id="livePreview"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h3>产品画像库</h3>
+              <p>产品画像用表格行呈现，供持仓录入时自动补齐。</p>
+            </div>
+            <span class="pill" id="profileCountPill">0 个产品</span>
+          </div>
+          <div class="card-body">
+            <div class="holding-list" id="profileList"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h3>我的持仓</h3>
+              <p>每条持仓是一张竖向表格卡片，更适合手机查看全部指标。</p>
+            </div>
+            <span class="pill" id="holdingCountPill">0 条持仓</span>
+          </div>
+          <div class="card-body">
+            <div class="mini">赎回建议仅为规则辅助提示，不构成投资建议。当前会综合可赎回时间、近期年化、当前收益与持仓集中度。</div>
+            <div style="height: 12px;"></div>
+            <div class="holding-list" id="holdingList"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn btn-secondary" id="jumpProfileBtn">去录画像</button>
+        <button class="btn btn-primary" id="jumpHoldingBtn">去录持仓</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "wealth-management-dashboard-iphone-v1";
+
+    const seedProfiles = [
+      {
+        code: "CMB-DEMO-001",
+        name: "示例-稳健固收+",
+        risk: "R2 中低风险",
+        combo: "高等级债券 72%，同业存单 18%，现金管理 10%",
+        nature: "固收增强",
+        rules: "最短持有 90 天，到期后每个开放日可赎回",
+        inceptionAnnualized: 4.86,
+        threeMonthAnnualized: 4.18,
+        oneMonthAnnualized: 3.72,
+        tags: "稳健仓位, 现金替代"
+      },
+      {
+        code: "CMB-DEMO-208",
+        name: "示例-多资产稳进",
+        risk: "R3 中风险",
+        combo: "债券 55%，REITs 10%，黄金 5%，权益增强 20%，现金管理 10%",
+        nature: "多资产配置",
+        rules: "最短持有 180 天，每周三开放赎回",
+        inceptionAnnualized: 5.91,
+        threeMonthAnnualized: 3.46,
+        oneMonthAnnualized: 1.22,
+        tags: "平衡配置, 收益进取"
+      },
+      {
+        code: "CMB-DEMO-306",
+        name: "示例-权益增强精选",
+        risk: "R4 中高风险",
+        combo: "权益资产 58%，量化对冲 17%，可转债 15%，现金管理 10%",
+        nature: "权益增强",
+        rules: "最短持有 365 天，到期后每月 15 日开放赎回",
+        inceptionAnnualized: 8.24,
+        threeMonthAnnualized: -1.35,
+        oneMonthAnnualized: -3.18,
+        tags: "进攻仓位, 波动较高"
+      }
+    ];
+
+    const seedHoldings = [
+      {
+        id: crypto.randomUUID(),
+        code: "CMB-DEMO-001",
+        amount: 88000,
+        buyDate: "2026-04-01",
+        redeemDate: "2026-07-01",
+        profit: 2160,
+        memo: "日常稳健仓位"
+      },
+      {
+        id: crypto.randomUUID(),
+        code: "CMB-DEMO-208",
+        amount: 46000,
+        buyDate: "2026-02-15",
+        redeemDate: "2026-08-15",
+        profit: 980,
+        memo: "平衡收益仓"
+      },
+      {
+        id: crypto.randomUUID(),
+        code: "CMB-DEMO-306",
+        amount: 36000,
+        buyDate: "2025-12-20",
+        redeemDate: "2026-12-20",
+        profit: -1260,
+        memo: "高波动进攻仓"
+      }
+    ];
+
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+    const formatCurrency = (value) => new Intl.NumberFormat("zh-CN", {
+      style: "currency",
+      currency: "CNY",
+      maximumFractionDigits: 2
+    }).format(Number(value || 0));
+
+    const formatPercent = (value, digits = 2) => `${Number(value || 0).toFixed(digits)}%`;
+
+    const formatDate = (value) => {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return escapeHtml(value);
+      return new Intl.DateTimeFormat("zh-CN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(date);
+    };
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return {
+          profiles: Array.isArray(parsed.profiles) && parsed.profiles.length ? parsed.profiles : structuredClone(seedProfiles),
+          holdings: Array.isArray(parsed.holdings) ? parsed.holdings : structuredClone(seedHoldings)
+        };
+      } catch {
+        return { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
+      }
+    }
+
+    let state = loadState();
+    let editingProfileCode = null;
+    let editingHoldingId = null;
+    let activePanel = "profile";
+
+    const profileForm = document.getElementById("profileForm");
+    const holdingForm = document.getElementById("holdingForm");
+    const profileList = document.getElementById("profileList");
+    const holdingList = document.getElementById("holdingList");
+    const summaryGrid = document.getElementById("summaryGrid");
+    const livePreview = document.getElementById("livePreview");
+    const profileCodeList = document.getElementById("profileCodeList");
+    const overviewTableBody = document.getElementById("overviewTableBody");
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getProfileByCode(code) {
+      return state.profiles.find((item) => item.code.trim().toUpperCase() === String(code || "").trim().toUpperCase());
+    }
+
+    function riskScore(risk) {
+      if (!risk) return 0;
+      if (risk.startsWith("R1")) return 1;
+      if (risk.startsWith("R2")) return 2;
+      if (risk.startsWith("R3")) return 3;
+      if (risk.startsWith("R4")) return 4;
+      if (risk.startsWith("R5")) return 5;
+      return 0;
+    }
+
+    function suggestionForHolding(holding, profile, shareRatio) {
+      if (!profile) {
+        return { label: "待补齐画像", reason: "先录该编号的产品画像，再判断是否赎回", tone: "pill" };
+      }
+
+      const now = new Date();
+      const redeemable = holding.redeemDate ? new Date(holding.redeemDate) <= now : false;
+      const inception = Number(profile.inceptionAnnualized) || 0;
+      const threeMonth = Number(profile.threeMonthAnnualized) || 0;
+      const oneMonth = Number(profile.oneMonthAnnualized) || 0;
+      const profit = Number(holding.profit) || 0;
+      const risk = riskScore(profile.risk);
+
+      if (!redeemable) {
+        return { label: "暂不赎回", reason: "尚未到可赎回时间", tone: "pill" };
+      }
+      if (shareRatio >= 0.35 && risk >= 4) {
+        return { label: "建议部分赎回", reason: "高风险产品仓位偏高，宜先分散", tone: "warn" };
+      }
+      if (oneMonth < 0 && threeMonth < 0 && profit <= 0) {
+        return { label: "可考虑赎回", reason: "短期年化转弱且当前收益偏弱", tone: "danger" };
+      }
+      if (oneMonth < 0 && threeMonth < inception && profit > 0) {
+        return { label: "观察后择机", reason: "仍有浮盈，但短期走弱，先观察", tone: "warn" };
+      }
+      if (inception > 0 && threeMonth > 0 && oneMonth > 0) {
+        return { label: "继续持有", reason: "短中长期表现尚稳，可继续跟踪", tone: "good" };
+      }
+      return { label: "保持观察", reason: "指标未形成明确赎回信号", tone: "pill" };
+    }
+
+    function getTotals(withDraft = null) {
+      const source = [...state.holdings];
+      if (withDraft) {
+        const idx = source.findIndex((item) => item.id === withDraft.id);
+        if (idx >= 0) source[idx] = withDraft; else source.unshift(withDraft);
+      }
+      const totalAmount = source.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      const totalProfit = source.reduce((sum, item) => sum + (Number(item.profit) || 0), 0);
+      const redeemableCount = source.filter((item) => item.redeemDate && new Date(item.redeemDate) <= new Date()).length;
+      const suggestedRedeemCount = source.filter((item) => {
+        const ratio = totalAmount ? (Number(item.amount) || 0) / totalAmount : 0;
+        const suggestion = suggestionForHolding(item, getProfileByCode(item.code), ratio);
+        return ["建议部分赎回", "可考虑赎回"].includes(suggestion.label);
+      }).length;
+      return { totalAmount, totalProfit, redeemableCount, suggestedRedeemCount, totalCount: source.length };
+    }
+
+    function setActivePanel(panel) {
+      activePanel = panel;
+      document.querySelectorAll(".segment-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.panel === panel);
+      });
+      document.querySelectorAll(".entry-panel").forEach((panelNode) => {
+        panelNode.classList.toggle("active", panelNode.id === `panel-${panel}`);
+      });
+      document.getElementById("entryHintPill").textContent = panel === "profile" ? "当前录入：产品画像" : "当前录入：我的持仓";
+      renderLivePreview();
+    }
+
+    function renderSummary() {
+      const stats = getTotals();
+      const cards = [
+        { label: "总持仓金额", value: formatCurrency(stats.totalAmount), sub: `${stats.totalCount} 条持仓` },
+        { label: "当前总收益", value: formatCurrency(stats.totalProfit), sub: stats.totalProfit >= 0 ? "整体为正收益" : "整体为负收益", className: stats.totalProfit >= 0 ? "profit-positive" : "profit-negative" },
+        { label: "已可赎回", value: `${stats.redeemableCount} 个`, sub: "按可赎回时间统计" },
+        { label: "重点关注", value: `${stats.suggestedRedeemCount} 个`, sub: "建议部分赎回 / 可考虑赎回" }
+      ];
+      summaryGrid.innerHTML = cards.map((card) => `
+        <article class="summary-item">
+          <div class="label">${escapeHtml(card.label)}</div>
+          <div class="value ${card.className || ""}">${escapeHtml(card.value)}</div>
+          <div class="sub">${escapeHtml(card.sub)}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderProfileOptions() {
+      profileCodeList.innerHTML = state.profiles
+        .slice()
+        .sort((a, b) => a.code.localeCompare(b.code, "zh-CN"))
+        .map((profile) => `<option value="${escapeHtml(profile.code)}">${escapeHtml(profile.name)}</option>`)
+        .join("");
+    }
+
+    function getOverviewRows() {
+      const totalAmount = state.holdings.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      const holdingRows = state.holdings.map((holding) => {
+        const profile = getProfileByCode(holding.code);
+        const ratio = totalAmount ? (Number(holding.amount) || 0) / totalAmount : 0;
+        const suggestion = suggestionForHolding(holding, profile, ratio);
+        return {
+          key: holding.id,
+          code: holding.code,
+          name: profile ? profile.name : "未匹配画像",
+          status: profile ? "画像 + 持仓" : "仅持仓",
+          amount: formatCurrency(holding.amount),
+          ratio: formatPercent(ratio * 100),
+          buyDate: formatDate(holding.buyDate),
+          redeemDate: formatDate(holding.redeemDate),
+          profit: Number(holding.profit) || 0,
+          suggestion: `${suggestion.label}｜${suggestion.reason}`,
+          risk: profile ? profile.risk : "-",
+          combo: profile ? profile.combo : "-",
+          nature: profile ? profile.nature : "-",
+          rules: profile ? profile.rules : "-",
+          inceptionAnnualized: profile ? formatPercent(profile.inceptionAnnualized) : "-",
+          threeMonthAnnualized: profile ? formatPercent(profile.threeMonthAnnualized) : "-",
+          oneMonthAnnualized: profile ? formatPercent(profile.oneMonthAnnualized) : "-",
+          tags: profile?.tags || "-",
+          memo: holding.memo || "-"
+        };
+      });
+
+      const usedCodes = new Set(state.holdings.map((holding) => String(holding.code || "").trim().toUpperCase()));
+      const profileOnlyRows = state.profiles
+        .filter((profile) => !usedCodes.has(String(profile.code || "").trim().toUpperCase()))
+        .map((profile) => ({
+          key: `profile-${profile.code}`,
+          code: profile.code,
+          name: profile.name,
+          status: "仅画像",
+          amount: "-",
+          ratio: "-",
+          buyDate: "-",
+          redeemDate: "-",
+          profit: null,
+          suggestion: "-",
+          risk: profile.risk,
+          combo: profile.combo,
+          nature: profile.nature,
+          rules: profile.rules,
+          inceptionAnnualized: formatPercent(profile.inceptionAnnualized),
+          threeMonthAnnualized: formatPercent(profile.threeMonthAnnualized),
+          oneMonthAnnualized: formatPercent(profile.oneMonthAnnualized),
+          tags: profile.tags || "-",
+          memo: "-"
+        }));
+
+      return [...holdingRows, ...profileOnlyRows];
+    }
+
+    function tableHtml(rows) {
+      return `
+        <div class="table-box">
+          <table>
+            <tbody>
+              ${rows.map((row) => `<tr><th>${escapeHtml(row.label)}</th><td>${row.raw ? row.value : escapeHtml(row.value)}</td></tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderOverviewTable() {
+      const rows = getOverviewRows();
+      document.getElementById("overviewCountPill").textContent = `${rows.length} 行`;
+
+      if (!rows.length) {
+        overviewTableBody.innerHTML = '<tr><td class="sticky-col" colspan="17" style="text-align:center; color: var(--muted);">还没有录入任何数据，先上面录画像或持仓。</td></tr>';
+        return;
+      }
+
+      overviewTableBody.innerHTML = rows.map((row) => {
+        const profitHtml = row.profit === null
+          ? "-"
+          : `<span class="${row.profit >= 0 ? "profit-positive" : "profit-negative"}">${escapeHtml(formatCurrency(row.profit))}</span>`;
+
+        return `
+          <tr>
+            <td class="sticky-col">
+              <div class="code">${escapeHtml(row.code)}</div>
+              <div style="margin-top:6px; font-weight:700; width:128px; white-space:normal; line-height:1.45;">${escapeHtml(row.name)}</div>
+            </td>
+            <td>${escapeHtml(row.status)}</td>
+            <td>${escapeHtml(row.amount)}</td>
+            <td>${escapeHtml(row.ratio)}</td>
+            <td>${escapeHtml(row.buyDate)}</td>
+            <td>${escapeHtml(row.redeemDate)}</td>
+            <td>${profitHtml}</td>
+            <td class="wrap-col">${escapeHtml(row.suggestion)}</td>
+            <td>${escapeHtml(row.risk)}</td>
+            <td class="wrap-col">${escapeHtml(row.combo)}</td>
+            <td>${escapeHtml(row.nature)}</td>
+            <td class="wrap-col">${escapeHtml(row.rules)}</td>
+            <td>${escapeHtml(row.inceptionAnnualized)}</td>
+            <td>${escapeHtml(row.threeMonthAnnualized)}</td>
+            <td>${escapeHtml(row.oneMonthAnnualized)}</td>
+            <td>${escapeHtml(row.tags)}</td>
+            <td>${escapeHtml(row.memo)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderProfiles() {
+      document.getElementById("profileCountPill").textContent = `${state.profiles.length} 个产品`;
+      if (!state.profiles.length) {
+        profileList.innerHTML = '<div class="empty">还没有产品画像，先从上面的“录产品画像”开始。</div>';
+        return;
+      }
+
+      profileList.innerHTML = state.profiles
+        .slice()
+        .sort((a, b) => a.code.localeCompare(b.code, "zh-CN"))
+        .map((profile) => {
+          const riskTone = riskScore(profile.risk) >= 4 ? "warn" : "good";
+          return `
+            <article class="holding-card">
+              <div class="holding-top">
+                <div>
+                  <div class="code">${escapeHtml(profile.code)}</div>
+                  <div class="holding-name">${escapeHtml(profile.name)}</div>
+                  ${profile.tags ? `<div class="holding-note">${escapeHtml(profile.tags)}</div>` : ""}
+                </div>
+                <span class="pill ${riskTone}">${escapeHtml(profile.risk)}</span>
+              </div>
+              <div class="holding-body">
+                ${tableHtml([
+                  { label: "组合内容", value: profile.combo },
+                  { label: "产品性质", value: profile.nature },
+                  { label: "持有规则", value: profile.rules },
+                  { label: "成立以来年化", value: formatPercent(profile.inceptionAnnualized) },
+                  { label: "3个月年化", value: formatPercent(profile.threeMonthAnnualized) },
+                  { label: "1个月年化", value: formatPercent(profile.oneMonthAnnualized) }
+                ])}
+                <div class="button-row" style="margin-top: 12px;">
+                  <button class="btn btn-secondary" type="button" data-action="edit-profile" data-code="${escapeHtml(profile.code)}">编辑画像</button>
+                  <button class="btn btn-ghost" type="button" data-action="delete-profile" data-code="${escapeHtml(profile.code)}">删除</button>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+    }
+
+    function renderHoldings() {
+      document.getElementById("holdingCountPill").textContent = `${state.holdings.length} 条持仓`;
+      if (!state.holdings.length) {
+        holdingList.innerHTML = '<div class="empty">还没有持仓记录。去“录我的持仓”里新增一条，下面就会自动出现表格卡片。</div>';
+        return;
+      }
+
+      const totalAmount = state.holdings.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      holdingList.innerHTML = state.holdings.map((holding) => {
+        const profile = getProfileByCode(holding.code);
+        const ratio = totalAmount ? (Number(holding.amount) || 0) / totalAmount : 0;
+        const suggestion = suggestionForHolding(holding, profile, ratio);
+        const profitClass = Number(holding.profit) >= 0 ? "profit-positive" : "profit-negative";
+        return `
+          <article class="holding-card">
+            <div class="holding-top">
+              <div>
+                <div class="code">${escapeHtml(holding.code)}</div>
+                <div class="holding-name">${profile ? escapeHtml(profile.name) : "未匹配画像"}</div>
+                ${holding.memo ? `<div class="holding-note">${escapeHtml(holding.memo)}</div>` : ""}
+              </div>
+              <span class="pill ${suggestion.tone}">${escapeHtml(suggestion.label)}</span>
+            </div>
+            <div class="holding-body">
+              ${tableHtml([
+                { label: "我买了多少钱", value: formatCurrency(holding.amount) },
+                { label: "占总持仓百分比", value: formatPercent(ratio * 100) },
+                { label: "买入时间", value: formatDate(holding.buyDate) },
+                { label: "可以赎回时间", value: formatDate(holding.redeemDate) },
+                { label: "我目前的收益", value: `<span class="${profitClass}">${escapeHtml(formatCurrency(holding.profit))}</span>`, raw: true },
+                { label: "风险等级", value: profile ? profile.risk : "-" },
+                { label: "组合", value: profile ? profile.combo : "-" },
+                { label: "产品性质", value: profile ? profile.nature : "-" },
+                { label: "持有规则", value: profile ? profile.rules : "-" },
+                { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "-" },
+                { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "-" },
+                { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "-" },
+                { label: "是否建议赎回", value: `${suggestion.label}｜${suggestion.reason}` }
+              ])}
+              <div class="button-row" style="margin-top: 12px;">
+                <button class="btn btn-secondary" type="button" data-action="edit-holding" data-id="${holding.id}">编辑</button>
+                <button class="btn btn-ghost" type="button" data-action="delete-holding" data-id="${holding.id}">删除</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function currentProfileDraft() {
+      return {
+        code: String(profileForm.code.value || "").trim().toUpperCase(),
+        name: String(profileForm.name.value || "").trim(),
+        risk: String(profileForm.risk.value || "R1 低风险"),
+        combo: String(profileForm.combo.value || "").trim(),
+        nature: String(profileForm.nature.value || "").trim(),
+        rules: String(profileForm.rules.value || "").trim(),
+        inceptionAnnualized: Number(profileForm.inceptionAnnualized.value || 0),
+        threeMonthAnnualized: Number(profileForm.threeMonthAnnualized.value || 0),
+        oneMonthAnnualized: Number(profileForm.oneMonthAnnualized.value || 0),
+        tags: String(profileForm.tags.value || "").trim()
+      };
+    }
+
+    function currentHoldingDraft() {
+      return {
+        id: editingHoldingId || "draft-holding",
+        code: String(holdingForm.code.value || "").trim().toUpperCase(),
+        amount: Number(holdingForm.amount.value || 0),
+        buyDate: String(holdingForm.buyDate.value || ""),
+        redeemDate: String(holdingForm.redeemDate.value || ""),
+        profit: Number(holdingForm.profit.value || 0),
+        memo: String(holdingForm.memo.value || "").trim()
+      };
+    }
+
+    function renderLivePreview() {
+      if (activePanel === "profile") {
+        const draft = currentProfileDraft();
+        if (!draft.code && !draft.name) {
+          livePreview.className = "live-block empty";
+          livePreview.innerHTML = '<div class="mini">开始输入产品编号、风险等级、组合内容等，下面会即时显示画像表格预览。</div>';
+          return;
+        }
+        livePreview.className = "live-block";
+        document.getElementById("previewPill").textContent = draft.code ? `预览 ${draft.code}` : "实时预览";
+        livePreview.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px;">
+            <div>
+              <div class="code">${escapeHtml(draft.code || "未填写编号")}</div>
+              <div class="holding-name" style="margin-top:8px;">${escapeHtml(draft.name || "未填写产品名称")}</div>
+            </div>
+            <span class="pill ${riskScore(draft.risk) >= 4 ? "warn" : "good"}">${escapeHtml(draft.risk || "待定")}</span>
+          </div>
+          ${tableHtml([
+            { label: "组合内容", value: draft.combo || "待填写" },
+            { label: "产品性质", value: draft.nature || "待填写" },
+            { label: "持有规则", value: draft.rules || "待填写" },
+            { label: "成立以来年化", value: draft.inceptionAnnualized ? formatPercent(draft.inceptionAnnualized) : "待填写" },
+            { label: "3个月年化", value: draft.threeMonthAnnualized ? formatPercent(draft.threeMonthAnnualized) : "待填写" },
+            { label: "1个月年化", value: draft.oneMonthAnnualized ? formatPercent(draft.oneMonthAnnualized) : "待填写" }
+          ])}
+        `;
+        return;
+      }
+
+      const draft = currentHoldingDraft();
+      if (!draft.code && !draft.amount && !draft.buyDate && !draft.redeemDate && !draft.profit) {
+        livePreview.className = "live-block empty";
+        livePreview.innerHTML = '<div class="mini">开始输入产品编号、金额、买入时间、可赎回时间和收益，下面会即时显示持仓表格预览。</div>';
+        return;
+      }
+      const profile = getProfileByCode(draft.code);
+      const totals = getTotals(draft);
+      const ratio = totals.totalAmount ? (Number(draft.amount) || 0) / totals.totalAmount : 0;
+      const suggestion = suggestionForHolding(draft, profile, ratio);
+      const profitClass = Number(draft.profit) >= 0 ? "profit-positive" : "profit-negative";
+      livePreview.className = profile ? "live-block" : "live-block empty";
+      document.getElementById("previewPill").textContent = draft.code ? `预览 ${draft.code}` : "实时预览";
+      livePreview.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px;">
+          <div>
+            <div class="code">${escapeHtml(draft.code || "未填写编号")}</div>
+            <div class="holding-name" style="margin-top:8px;">${profile ? escapeHtml(profile.name) : "未匹配画像"}</div>
+            ${draft.memo ? `<div class="holding-note">${escapeHtml(draft.memo)}</div>` : ""}
+          </div>
+          <span class="pill ${suggestion.tone}">${escapeHtml(suggestion.label)}</span>
+        </div>
+        ${tableHtml([
+          { label: "我买了多少钱", value: draft.amount ? formatCurrency(draft.amount) : "待填写" },
+          { label: "占总持仓百分比", value: draft.amount ? formatPercent(ratio * 100) : "待填写" },
+          { label: "买入时间", value: draft.buyDate ? formatDate(draft.buyDate) : "待填写" },
+          { label: "可以赎回时间", value: draft.redeemDate ? formatDate(draft.redeemDate) : "待填写" },
+          { label: "我目前的收益", value: draft.profit || draft.profit === 0 ? `<span class="${profitClass}">${escapeHtml(formatCurrency(draft.profit))}</span>` : "待填写", raw: true },
+          { label: "风险等级", value: profile ? profile.risk : "请先补录画像" },
+          { label: "组合", value: profile ? profile.combo : "请先补录画像" },
+          { label: "产品性质", value: profile ? profile.nature : "请先补录画像" },
+          { label: "持有规则", value: profile ? profile.rules : "请先补录画像" },
+          { label: "成立以来年化", value: profile ? formatPercent(profile.inceptionAnnualized) : "请先补录画像" },
+          { label: "3个月年化", value: profile ? formatPercent(profile.threeMonthAnnualized) : "请先补录画像" },
+          { label: "1个月年化", value: profile ? formatPercent(profile.oneMonthAnnualized) : "请先补录画像" },
+          { label: "是否建议赎回", value: `${suggestion.label}｜${suggestion.reason}` }
+        ])}
+      `;
+    }
+
+    function resetProfileForm() {
+      editingProfileCode = null;
+      profileForm.reset();
+      profileForm.risk.value = "R1 低风险";
+      renderLivePreview();
+    }
+
+    function resetHoldingForm() {
+      editingHoldingId = null;
+      holdingForm.reset();
+      renderLivePreview();
+    }
+
+    function fillProfileForm(profile) {
+      editingProfileCode = profile.code;
+      profileForm.code.value = profile.code;
+      profileForm.name.value = profile.name;
+      profileForm.risk.value = profile.risk;
+      profileForm.nature.value = profile.nature;
+      profileForm.combo.value = profile.combo;
+      profileForm.rules.value = profile.rules;
+      profileForm.inceptionAnnualized.value = profile.inceptionAnnualized;
+      profileForm.threeMonthAnnualized.value = profile.threeMonthAnnualized;
+      profileForm.oneMonthAnnualized.value = profile.oneMonthAnnualized;
+      profileForm.tags.value = profile.tags || "";
+      setActivePanel("profile");
+      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+      renderLivePreview();
+    }
+
+    function fillHoldingForm(holding) {
+      editingHoldingId = holding.id;
+      holdingForm.code.value = holding.code;
+      holdingForm.amount.value = holding.amount;
+      holdingForm.buyDate.value = holding.buyDate;
+      holdingForm.redeemDate.value = holding.redeemDate;
+      holdingForm.profit.value = holding.profit;
+      holdingForm.memo.value = holding.memo || "";
+      setActivePanel("holding");
+      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+      renderLivePreview();
+    }
+
+    function restoreSeed() {
+      if (!window.confirm("确定恢复示例数据吗？当前数据会被示例覆盖。")) return;
+      state = { profiles: structuredClone(seedProfiles), holdings: structuredClone(seedHoldings) };
+      saveState();
+      resetProfileForm();
+      resetHoldingForm();
+      renderAll();
+    }
+
+    function exportData() {
+      const payload = { exportedAt: new Date().toISOString(), profiles: state.profiles, holdings: state.holdings };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `wealth-management-iphone-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    profileForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const draft = currentProfileDraft();
+      const index = state.profiles.findIndex((item) => item.code === editingProfileCode || item.code === draft.code);
+      if (index >= 0) state.profiles[index] = draft; else state.profiles.unshift(draft);
+      saveState();
+      resetProfileForm();
+      renderAll();
+    });
+
+    holdingForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const draft = currentHoldingDraft();
+      const index = state.holdings.findIndex((item) => item.id === draft.id);
+      if (index >= 0) state.holdings[index] = draft; else state.holdings.unshift(draft);
+      saveState();
+      resetHoldingForm();
+      renderAll();
+    });
+
+    profileList.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const code = button.dataset.code;
+      const action = button.dataset.action;
+      const profile = getProfileByCode(code);
+      if (!profile) return;
+      if (action === "edit-profile") fillProfileForm(profile);
+      if (action === "delete-profile") {
+        const usedCount = state.holdings.filter((item) => item.code === code).length;
+        const message = usedCount ? `该画像已被 ${usedCount} 条持仓引用，删除后这些持仓将显示未匹配画像，确定删除吗？` : "确定删除这条画像吗？";
+        if (!window.confirm(message)) return;
+        state.profiles = state.profiles.filter((item) => item.code !== code);
+        saveState();
+        renderAll();
+      }
+    });
+
+    holdingList.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const id = button.dataset.id;
+      const action = button.dataset.action;
+      const holding = state.holdings.find((item) => item.id === id);
+      if (!holding) return;
+      if (action === "edit-holding") fillHoldingForm(holding);
+      if (action === "delete-holding") {
+        if (!window.confirm("确定删除这条持仓吗？")) return;
+        state.holdings = state.holdings.filter((item) => item.id !== id);
+        saveState();
+        renderAll();
+      }
+    });
+
+    document.querySelectorAll(".segment-btn").forEach((button) => {
+      button.addEventListener("click", () => setActivePanel(button.dataset.panel));
+    });
+
+    [
+      profileForm.code, profileForm.name, profileForm.risk, profileForm.nature, profileForm.combo,
+      profileForm.rules, profileForm.inceptionAnnualized, profileForm.threeMonthAnnualized,
+      profileForm.oneMonthAnnualized, profileForm.tags,
+      holdingForm.code, holdingForm.amount, holdingForm.profit, holdingForm.buyDate,
+      holdingForm.redeemDate, holdingForm.memo
+    ].forEach((field) => field.addEventListener("input", renderLivePreview));
+
+    document.getElementById("profileResetBtn").addEventListener("click", resetProfileForm);
+    document.getElementById("holdingResetBtn").addEventListener("click", resetHoldingForm);
+    document.getElementById("seedBtn").addEventListener("click", restoreSeed);
+    document.getElementById("exportBtn").addEventListener("click", exportData);
+    document.getElementById("jumpProfileBtn").addEventListener("click", () => {
+      setActivePanel("profile");
+      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+    });
+    document.getElementById("jumpHoldingBtn").addEventListener("click", () => {
+      setActivePanel("holding");
+      document.querySelector(".app-scroll").scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    function renderAll() {
+      renderSummary();
+      renderProfileOptions();
+      renderOverviewTable();
+      renderProfiles();
+      renderHoldings();
+      renderLivePreview();
+    }
+
+    setActivePanel("profile");
+    renderAll();
+  </script>
+</body>
+</html>
